@@ -1,7 +1,10 @@
 import argparse
 from services.auth import login, check_authorization
-from services.user_service import create_user
-from services.department_service import create_department
+from services.user_service import create_user, get_users, get_user
+from services.department_service import create_department, get_departments, get_department
+from services.event_service import get_events, get_event
+from services.client_service import get_clients, get_client
+from services.contract_service import get_contracts, get_contract
 
 
 def main():
@@ -43,9 +46,48 @@ def main():
     create_department_parser.add_argument(
         '--name', required=True, help='Name of the department')
 
+    # Commande pour obtenir tous les utilisateurs
+    get_users_parser = subparsers.add_parser('get_users')
+
+    # Commande pour obtenir un utilisateur par ID : python main.py get_user --user_id 1
+    get_user_parser = subparsers.add_parser('get_user')
+    get_user_parser.add_argument(
+        '--user_id', type=int, required=True, help='ID of the user')
+
+    # Commande pour obtenir tous les départements
+    get_departments_parser = subparsers.add_parser('get_departments')
+
+    # Commande pour obtenir un département par ID : python main.py get_department --department_id 1
+    get_department_parser = subparsers.add_parser('get_department')
+    get_department_parser.add_argument(
+        '--department_id', type=int, required=True, help='ID of the department')
+
+    # Commande pour obtenir tous les événements
+    get_events_parser = subparsers.add_parser('get_events')
+
+    # Commande pour obtenir un événement par ID : python main.py get_event --event_id 1
+    get_event_parser = subparsers.add_parser('get_event')
+    get_event_parser.add_argument(
+        '--event_id', type=int, required=True, help='ID of the event')
+
+    # Commande pour obtenir tous les clients
+    get_clients_parser = subparsers.add_parser('get_clients')
+
+    # Commande pour obtenir un client par ID : python main.py get_client --client_id 1
+    get_client_parser = subparsers.add_parser('get_client')
+    get_client_parser.add_argument(
+        '--client_id', type=int, required=True, help='ID of the client')
+
+    # Commande pour obtenir tous les contrats
+    get_contracts_parser = subparsers.add_parser('get_contracts')
+
+    # Commande pour obtenir un contrat par ID : python main.py get_contract --contract_id 1
+    get_contract_parser = subparsers.add_parser('get_contract')
+    get_contract_parser.add_argument(
+        '--contract_id', type=int, required=True, help='ID of the contract')
+
     args = parser.parse_args()
 
-# exemple de commande : python main.py login luc@example.com securepassword
     if args.command == 'login':
         try:
             login(args.email, args.password)
@@ -56,8 +98,6 @@ def main():
             print("Action authorized.")
         else:
             print("Action not authorized.")
-
-# exemple de commande : python main.py create_user --employee_number 2 --name "Luc  LA" --email "luc@example.com" --department_id 7 --password "securepassword" --can_create_clients --can_modify_contracts --can_assign_events
     elif args.command == 'create_user':
         user_id, user_name = create_user(
             employee_number=args.employee_number,
@@ -70,12 +110,85 @@ def main():
             can_assign_events=args.can_assign_events
         )
         print(f"User {user_name} created successfully with ID {user_id}")
-
-    # Commande pour créer un département : python main.py create_department --name "commercial"
     elif args.command == 'create_department':
         department_id, department_name = create_department(args.name)
         print(f"Department {department_name} created successfully with ID {
               department_id}")
+    elif args.command == 'get_users':
+        users = get_users()
+        if not users:
+            print("No users found.")
+        else:
+            print(f"There are {len(users)} users")
+            for user in users:
+                print(f"User ID: {user.id}, Name: {
+                      user.name}, Email: {user.email}")
+    elif args.command == 'get_user':
+        user = get_user(args.user_id)
+        if not user:
+            print("User not found.")
+        else:
+            print(f"User ID: {user.id}, Name: {
+                  user.name}, Email: {user.email}")
+    elif args.command == 'get_departments':
+        departments = get_departments()
+        if not departments:
+            print("No departments found.")
+        else:
+            print(f"There are {len(departments)} departments")
+            for department in departments:
+                print(f"Department ID: {
+                      department.id}, Name: {department.name}")
+    elif args.command == 'get_department':
+        department = get_department(args.department_id)
+        if not department:
+            print("Department not found.")
+        else:
+            print(f"Department ID: {department.id}, Name: {department.name}")
+    elif args.command == 'get_events':
+        events = get_events()
+        if not events:
+            print("No events found.")
+        else:
+            print(f"There are {len(events)} events")
+            for event in events:
+                print(f"Event ID: {event.id}, Name: {event.event_name}")
+    elif args.command == 'get_event':
+        event = get_event(args.event_id)
+        if not event:
+            print("Event not found.")
+        else:
+            print(f"Event ID: {event.id}, Name: {event.event_name}")
+    elif args.command == 'get_clients':
+        clients = get_clients()
+        if not clients:
+            print("No clients found.")
+        else:
+            print(f"There are {len(clients)} clients")
+            for client in clients:
+                print(f"Client ID: {client.id}, Name: {client.client_name}")
+    elif args.command == 'get_client':
+        client = get_client(args.client_id)
+        if not client:
+            print("Client not found.")
+        else:
+            print(f"Client ID: {client.id}, Name: {client.client_name}")
+    elif args.command == 'get_contracts':
+        contracts = get_contracts()
+        if not contracts:
+            print("No contracts found.")
+        else:
+            print(f"There are {len(contracts)} contracts")
+            for contract in contracts:
+                print(f"Contract ID: {contract.id}, Name: {
+                      contract.contract_name}")
+    elif args.command == 'get_contract':
+        contract = get_contract(args.contract_id)
+        if not contract:
+            print("Contract not found.")
+        else:
+            print(f"Contract ID: {contract.id}, Name: {
+                  contract.contract_name}")
 
 
 if __name__ == "__main__":
