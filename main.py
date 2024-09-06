@@ -146,7 +146,7 @@ def main():
                 print(f"Department ID: {
                       department.id}, Name: {department.name}")
     elif args.command == 'get_department':
-        department = Department_services.get()(args.department_id)
+        department = Department_services.get(args.department_id)
         if not department:
             print("Department not found.")
         else:

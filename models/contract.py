@@ -5,7 +5,6 @@ from .base import Base
 
 class Contract(Base):
     __tablename__ = 'contracts'
-
     id = Column(Integer, primary_key=True)
     client_id = Column(Integer, ForeignKey('clients.id'), nullable=False)
     total_amount = Column(Float, nullable=False)
