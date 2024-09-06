@@ -1,6 +1,3 @@
-import jwt
-import datetime
-from config import SECRET_KEY, JWT_ALGORITHM
 from models import Session, User
 from utils.jwt_utils import create_jwt, decode_jwt
 

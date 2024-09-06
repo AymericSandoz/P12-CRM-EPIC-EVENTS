@@ -5,7 +5,7 @@ from models import Session, User
 # Créer une classe User_Service avec get, create, etc...
 
 
-class User_Service():
+class User_Services():
     def create(employee_number, name, email, department_id, password, can_create_clients=False, can_modify_contracts=False, can_assign_events=False):
         session = Session()
         new_user = User(

@@ -1,10 +1,16 @@
 import argparse
 from services.auth import login, check_authorization
-from services.user_service import create_user, get_users, get_user
-from services.department_service import create_department, get_departments, get_department
-from services.event_service import get_events, get_event
-from services.client_service import get_clients, get_client
-from services.contract_service import get_contracts, get_contract
+# from services.user_service import create_user, get_users, get_user
+# from services.department_service import create_department, get_departments, get_department
+# from services.event_service import get_events, get_event
+# from services.client_service import get_clients, get_client
+# from services.contract_service import get_contracts, get_contract
+
+from services.user_service import User_Services
+from services.department_service import Department_services
+from services.event_service import Event_services
+from services.client_service import Client_services
+from services.contract_service import Contract_services
 
 
 def main():
@@ -99,7 +105,7 @@ def main():
         else:
             print("Action not authorized.")
     elif args.command == 'create_user':
-        user_id, user_name = create_user(
+        user_id, user_name = User_Services.create(
             employee_number=args.employee_number,
             name=args.name,
             email=args.email,
@@ -111,11 +117,11 @@ def main():
         )
         print(f"User {user_name} created successfully with ID {user_id}")
     elif args.command == 'create_department':
-        department_id, department_name = create_department(args.name)
+        department_id, department_name = Department_services.create(args.name)
         print(f"Department {department_name} created successfully with ID {
               department_id}")
     elif args.command == 'get_users':
-        users = get_users()
+        users = User_Services.get_all()
         if not users:
             print("No users found.")
         else:
@@ -124,14 +130,14 @@ def main():
                 print(f"User ID: {user.id}, Name: {
                       user.name}, Email: {user.email}")
     elif args.command == 'get_user':
-        user = get_user(args.user_id)
+        user = User_Services.get(args.user_id)
         if not user:
             print("User not found.")
         else:
             print(f"User ID: {user.id}, Name: {
                   user.name}, Email: {user.email}")
     elif args.command == 'get_departments':
-        departments = get_departments()
+        departments = Department_services.get_all()
         if not departments:
             print("No departments found.")
         else:
@@ -140,13 +146,13 @@ def main():
                 print(f"Department ID: {
                       department.id}, Name: {department.name}")
     elif args.command == 'get_department':
-        department = get_department(args.department_id)
+        department = Department_services.get()(args.department_id)
         if not department:
             print("Department not found.")
         else:
             print(f"Department ID: {department.id}, Name: {department.name}")
     elif args.command == 'get_events':
-        events = get_events()
+        events = Event_services.get_all()
         if not events:
             print("No events found.")
         else:
@@ -154,13 +160,13 @@ def main():
             for event in events:
                 print(f"Event ID: {event.id}, Name: {event.event_name}")
     elif args.command == 'get_event':
-        event = get_event(args.event_id)
+        event = Event_services.get(args.event_id)
         if not event:
             print("Event not found.")
         else:
             print(f"Event ID: {event.id}, Name: {event.event_name}")
     elif args.command == 'get_clients':
-        clients = get_clients()
+        clients = Client_services.get_all()
         if not clients:
             print("No clients found.")
         else:
@@ -168,13 +174,13 @@ def main():
             for client in clients:
                 print(f"Client ID: {client.id}, Name: {client.client_name}")
     elif args.command == 'get_client':
-        client = get_client(args.client_id)
+        client = Client_services.get(args.client_id)
         if not client:
             print("Client not found.")
         else:
             print(f"Client ID: {client.id}, Name: {client.client_name}")
     elif args.command == 'get_contracts':
-        contracts = get_contracts()
+        contracts = Contract_services.get_all()
         if not contracts:
             print("No contracts found.")
         else:
@@ -183,7 +189,7 @@ def main():
                 print(f"Contract ID: {contract.id}, Name: {
                       contract.contract_name}")
     elif args.command == 'get_contract':
-        contract = get_contract(args.contract_id)
+        contract = Contract_services.get(args.contract_id)
         if not contract:
             print("Contract not found.")
         else:
