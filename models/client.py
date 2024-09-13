@@ -12,7 +12,7 @@ class Client(Base):
     phone = Column(String(12), nullable=False)
     company_name = Column(String(255), nullable=False)
     created_date = Column(Date, nullable=False, default=func.now())
-    last_contact_date = Column(Date, required=False)
+    last_update = Column(Date, nullable=False)
     contact_person = Column(String(255), nullable=False)
 
     contracts = relationship('Contract', back_populates='client')

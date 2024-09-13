@@ -27,3 +27,20 @@ class Contract_services():
         contract = session.query(Contract).filter_by(id=contract_id).first()
         session.close()
         return contract
+
+    def update(contract_id, **kwargs):
+        session = Session()
+        contract = session.query(Contract).filter_by(id=contract_id).first()
+        for key, value in kwargs.items():
+            setattr(contract, key, value)
+        session.commit()
+        session.close()
+        return contract
+
+    def delete(contract_id):
+        session = Session()
+        contract = session.query(Contract).filter_by(id=contract_id).first()
+        session.delete(contract)
+        session.commit()
+        session.close()
+        return contract

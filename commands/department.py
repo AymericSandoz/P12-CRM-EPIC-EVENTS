@@ -8,7 +8,19 @@ def add_department_commands(subparsers):
 
     get_department_parser = subparsers.add_parser('get_department')
     get_department_parser.add_argument(
-        '--department_id', type=int, required=True, help='ID of the department')
+        '--obj_id', type=int, required=True, help='ID of the department')
+
+    subparsers.add_parser('get_departments')
+
+    update_department_parser = subparsers.add_parser('update_department')
+    update_department_parser.add_argument(
+        '--obj_id', type=int, required=True, help='ID of the department')
+    update_department_parser.add_argument(
+        '--name', help='Name of the department')
+
+    delete_department_parser = subparsers.add_parser('delete_department')
+    delete_department_parser.add_argument(
+        '--obj_id', type=int, required=True, help='ID of the department')
 
 
 def handle_department_commands(args):
@@ -32,3 +44,18 @@ def handle_department_commands(args):
             print("Department not found.")
         else:
             print(f"Department ID: {department.id}, Name: {department.name}")
+
+    elif args.command == 'update_department':
+        # convertir avec vars mais enlever les valeurs nulles, obj id et command
+        args_dict = {k: v for k, v in vars(args).items(
+        ) if v is not None and k not in ['obj_id', 'command']}
+        department_name = Department_services.update(
+            obj_id=args.obj_id,
+            **args_dict
+        )
+        print(f"Department {department_name} updated successfully with ID {
+              department_id}")
+
+    elif args.command == 'delete_department':
+        department_name = Department_services.delete(args.obj_id)
+        print(f"Department {department_name} deleted successfully")

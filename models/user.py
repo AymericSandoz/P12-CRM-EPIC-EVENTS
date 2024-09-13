@@ -17,10 +17,6 @@ class User(Base):
         'departments.id'), nullable=False)
     department = relationship('Department', back_populates='users')
 
-    can_create_clients = Column(Boolean, default=False)
-    can_modify_contracts = Column(Boolean, default=False)
-    can_assign_events = Column(Boolean, default=False)
-
     def set_password(self, password):
         salt = bcrypt.gensalt()
         self.password_hash = bcrypt.hashpw(password.encode('utf-8'), salt)

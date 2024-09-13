@@ -2,6 +2,7 @@ from services.user_service import User_Services
 
 
 def add_user_commands(subparsers):
+    # create
     create_user_parser = subparsers.add_parser('create_user')
     create_user_parser.add_argument(
         '--employee_number', required=True, help='Employee number of the user')
@@ -13,16 +14,28 @@ def add_user_commands(subparsers):
         '--department_id', type=int, required=True, help='Department ID of the user')
     create_user_parser.add_argument(
         '--password', required=True, help='Password for the user')
-    create_user_parser.add_argument(
-        '--can_create_clients', action='store_true', help='Permission to create clients')
-    create_user_parser.add_argument(
-        '--can_modify_contracts', action='store_true', help='Permission to modify contracts')
-    create_user_parser.add_argument(
-        '--can_assign_events', action='store_true', help='Permission to assign events')
+    subparsers.add_parser('get_users')
 
+    # get
     get_user_parser = subparsers.add_parser('get_user')
     get_user_parser.add_argument(
-        '--user_id', type=int, required=True, help='ID of the user')
+        '--obj_id', type=int, required=True, help='ID of the user')
+
+    # update
+    update_user_parser = subparsers.add_parser('update_user')
+    update_user_parser.add_argument(
+        '--obj_id', type=int, required=True, help='ID of the user')
+    update_user_parser.add_argument(
+        '--employee_number', help='Employee number of the user')
+    update_user_parser.add_argument(
+        '--name', help='Name of the user')
+    update_user_parser.add_argument(
+        '--email', help='Email of the user')
+    update_user_parser.add_argument(
+        '--department_id', type=int, help='Department ID of the user')
+
+    # delete
+    subparsers.add_parser('delete_user')
 
 
 def handle_user_commands(args):
@@ -54,3 +67,14 @@ def handle_user_commands(args):
         else:
             print(f"User ID: {user.id}, Name: {
                   user.name}, Email: {user.email}")
+
+    elif args.command == 'update_user':
+        # convertir avec vars mais enlever les valeurs nulles, obj id et command
+        args_dict = {k: v for k, v in vars(args).items(
+        ) if v is not None and k not in ['obj_id', 'command']}
+        username = User_Services.update(args.obj_id, **args_dict)
+        print(f"User {username} updated successfully.")
+
+    elif args.command == 'delete_user':
+        username = User_Services.delete(args.obj_id)
+        print(f"User {username} deleted successfully.")

@@ -25,3 +25,22 @@ class Department_services():
             id=department_id).first()
         session.close()
         return department
+
+    def update(department_id, **kwargs):
+        session = Session()
+        department = session.query(Department).filter_by(
+            id=department_id).first()
+        for key, value in kwargs.items():
+            setattr(department, key, value)
+        session.commit()
+        session.close()
+        return department
+
+    def delete(department_id):
+        session = Session()
+        department = session.query(Department).filter_by(
+            id=department_id).first()
+        session.delete(department)
+        session.commit()
+        session.close()
+        return department

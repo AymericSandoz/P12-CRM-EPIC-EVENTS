@@ -17,7 +17,10 @@ class Event_services():
         )
         session.add(event)
         session.commit()
+        event_id = event.id
+        event_name = event.event_name
         session.close()
+        return event_id, event_name
 
     def get_all():
         session = Session()
@@ -30,3 +33,23 @@ class Event_services():
         event = session.query(Event).filter_by(id=event_id).first()
         session.close()
         return event
+
+    def update(event_id, **kwargs):
+        session = Session()
+        event = session.query(Event).filter_by(id=event_id).first()
+        for key, value in kwargs.items():
+            setattr(event, key, value)
+        session.commit()
+        event_name = event.event_name
+        session.close()
+        return event_name
+
+    def delete(event_id):
+        session = Session()
+        event = session.query(Event).filter_by(id=event_id).first()
+        session.delete(event)
+        session.commit()
+        event_name = event.event_name
+
+        session.close()
+        return event_name

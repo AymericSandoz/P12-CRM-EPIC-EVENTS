@@ -12,10 +12,7 @@ class User_Services():
             employee_number=employee_number,
             name=name,
             email=email,
-            department_id=department_id,
-            can_create_clients=can_create_clients,
-            can_modify_contracts=can_modify_contracts,
-            can_assign_events=can_assign_events
+            department_id=department_id
         )
         new_user.set_password(password)
         session.add(new_user)
@@ -36,3 +33,24 @@ class User_Services():
         user = session.query(User).filter_by(id=user_id).first()
         session.close()
         return user
+
+    def update(user_id, **kwargs):
+        session = Session()
+        user = session.query(User).filter_by(id=user_id).first()
+        for key, value in kwargs.items():
+            setattr(user, key, value)
+        session.commit()
+        user_id = user.id
+        user_name = user.name
+        session.close()
+        return user_name
+
+    def delete(user_id):
+        session = Session()
+        user = session.query(User).filter_by(id=user_id).first()
+        session.delete(user)
+        session.commit()
+        user_id = user.id
+        user_name = user.name
+        session.close()
+        return user_name

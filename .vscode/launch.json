@@ -1,13 +1,380 @@
+// {
+//   "version": "0.2.0",
+//   "configurations": [
+//     {
+//       "name": "Python: Login",
+//       "type": "python",
+//       "request": "launch",
+//       "program": "${workspaceFolder}/main_2.py",
+//       "console": "integratedTerminal",
+//       "args": [
+//         "login",
+//         "--email",
+//         "luc@example.com",
+//         "--password",
+//         "securepassword"
+//       ]
+//     },
+//     {
+//       "name": "Python: Get Users",
+//       "type": "python",
+//       "request": "launch",
+//       "program": "${workspaceFolder}/main_2.py",
+//       "console": "integratedTerminal",
+//       "args": ["get_users"]
+//     },
+//     {
+//       "name": "Python: Get User",
+//       "type": "python",
+//       "request": "launch",
+//       "program": "${workspaceFolder}/main_2.py",
+//       "console": "integratedTerminal",
+//       "args": ["get_user", "--user_id", "1"]
+//     },
+//     {
+//       "name": "Python: update User",
+//       "type": "python",
+//       "request": "launch",
+//       "program": "${workspaceFolder}/main_2.py",
+//       "console": "integratedTerminal",
+//       "args": [
+//         "update_user",
+//         "--obj_id",
+//         "2",
+//         "--email",
+//         "john.update1@example.com"
+//       ]
+//     },
+//     {
+//       "name": "Python: get contracts",
+//       "type": "python",
+//       "request": "launch",
+//       "program": "${workspaceFolder}/main_2.py",
+//       "console": "integratedTerminal",
+//       "args": ["get_contracts"]
+//     },
+//     {
+//       "name": "Python: create contracts",
+//       "type": "python",
+//       "request": "launch",
+//       "program": "${workspaceFolder}/main_2.py",
+//       "console": "integratedTerminal",
+//       "args": [
+//         "create_contract",
+//         "--client_id",
+//         "2",
+//         "--total_amount",
+//         "100",
+//         "--amount_due",
+//         "100"
+//       ]
+//     },
+//     {
+//       "name": "Python: Create Client",
+//       "type": "python",
+//       "request": "launch",
+//       "program": "${workspaceFolder}/main_2.py",
+//       "console": "integratedTerminal",
+//       "args": [
+//         "create_client",
+//         "--name",
+//         "John",
+//         "--email",
+//         "john@example.com",
+//         "--phone",
+//         "1234567890",
+//         "--company_name",
+//         "John's Company",
+//         "--contact_person",
+//         "John Doe",
+//         "--last_contact_date",
+//         "2024-09-01"
+//       ]
+//     }
+//   ]
+// }
+
 {
   "version": "0.2.0",
   "configurations": [
+    // Commandes pour User
     {
-      "name": "Python: main.py",
+      "name": "Python: Get Users",
       "type": "python",
       "request": "launch",
-      "program": "${workspaceFolder}/main.py",
+      "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["login", "luc@example.com", "securepassword"] // SI je veux me connecter
+      "args": ["get_users"]
+    },
+    {
+      "name": "Python: Get User",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": ["get_user", "--obj_id", "1"]
+    },
+    {
+      "name": "Python: Create User",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": [
+        "create_user",
+        "--employee_number",
+        "001",
+        "--name",
+        "John Doe",
+        "--email",
+        "john@example.com",
+        "--password",
+        "password123",
+        "--department_id",
+        "1"
+      ]
+    },
+    {
+      "name": "Python: Update User",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": [
+        "update_user",
+        "--obj_id",
+        "1",
+        "--email",
+        "john.update@example.com"
+      ]
+    },
+    {
+      "name": "Python: Delete User",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": ["delete_user", "--obj_id", "1"]
+    },
+
+    // Commandes pour Client
+    {
+      "name": "Python: Get Clients",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": ["get_clients"]
+    },
+    {
+      "name": "Python: Get Client",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": ["get_client", "--obj_id", "1"]
+    },
+    {
+      "name": "Python: Create Client",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": [
+        "create_client",
+        "--full_name",
+        "zzzzzzzzz Corp",
+        "--email",
+        "cliezzsssszzzzzzzzzzznt@example.com",
+        "--phone",
+        "0123456789",
+        "--company_name",
+        "Acme Inc.",
+        "--last_update",
+        "2024-09-01",
+        "--contact_person",
+        "Jane Doe"
+      ]
+    },
+    {
+      "name": "Python: Update Client",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": [
+        "update_client",
+        "--obj_id",
+        "1",
+        "--full_name",
+        "Acme Updated Corp"
+      ]
+    },
+    {
+      "name": "Python: Delete Client",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": ["delete_client", "--obj_id", "1"]
+    },
+
+    // Commandes pour Contract
+    {
+      "name": "Python: Get Contracts",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": ["get_contracts"]
+    },
+    {
+      "name": "Python: Get Contract",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": ["get_contract", "--obj_id", "1"]
+    },
+    {
+      "name": "Python: Create Contract",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": [
+        "create_contract",
+        "--client_id",
+        "1",
+        "--total_amount",
+        "5000",
+        "--amount_due",
+        "1000"
+      ]
+    },
+    {
+      "name": "Python: Update Contract",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": ["update_contract", "--obj_id", "1", "--total_amount", "6000"]
+    },
+    {
+      "name": "Python: Delete Contract",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": ["delete_contract", "--obj_id", "1"]
+    },
+
+    // Commandes pour Event
+    {
+      "name": "Python: Get Events",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": ["get_events"]
+    },
+    {
+      "name": "Python: Get Event",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": ["get_event", "--obj_id", "1"]
+    },
+    {
+      "name": "Python: Create Event",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": [
+        "create_event",
+        "--contract_id",
+        "1",
+        "--client_id",
+        "1",
+        "--event_name",
+        "Annual Meeting",
+        "--event_start_date",
+        "2024-09-15",
+        "--event_end_date",
+        "2024-09-16",
+        "--support_contact",
+        "Jane Smith",
+        "--location",
+        "New York",
+        "--attendees",
+        "150"
+      ]
+    },
+    {
+      "name": "Python: Update Event",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": [
+        "update_event",
+        "--obj_id",
+        "1",
+        "--event_name",
+        "Updated Meeting"
+      ]
+    },
+    {
+      "name": "Python: Delete Event",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": ["delete_event", "--obj_id", "1"]
+    },
+
+    // Commandes pour Department
+    {
+      "name": "Python: Get Departments",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": ["get_departments"]
+    },
+    {
+      "name": "Python: Get Department",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": ["get_department", "--obj_id", "1"]
+    },
+    {
+      "name": "Python: Create Department",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": ["create_department", "--name", "Finance"]
+    },
+    {
+      "name": "Python: Update Department",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": ["update_department", "--obj_id", "1", "--name", "Operations"]
+    },
+    {
+      "name": "Python: Delete Department",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": ["delete_department", "--obj_id", "1"]
     }
   ]
 }
