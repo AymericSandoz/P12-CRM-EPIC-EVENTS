@@ -84,7 +84,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["get_clients"]
+      "args": ["client", "get_clients"]
     },
     {
       "name": "Python: Get Client",
@@ -92,7 +92,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["get_client", "--obj_id", "1"]
+      "args": ["client", "get_client", "--obj_id", "1"]
     },
     {
       "name": "Python: Create Client",
@@ -101,19 +101,20 @@
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
       "args": [
+        "client",
         "create_client",
         "--full_name",
-        "dddddddddd Corp",
+        "s s",
         "--email",
-        "cliedddddzzsssszzzzzzzzzzznt@example.com",
+        "sssss@example.com",
         "--phone",
         "0123456789",
         "--company_name",
-        "Acme Inc.",
+        "Asscme Inc.",
         "--last_update",
         "2024-09-01",
         "--contact_person",
-        "Jane Doe"
+        "sa sa"
       ]
     },
     {
@@ -123,6 +124,7 @@
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
       "args": [
+        "client",
         "update_client",
         "--obj_id",
         "1",
@@ -136,7 +138,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["delete_client", "--obj_id", "1"]
+      "args": ["client", "delete_client", "--obj_id", "1"]
     },
 
     // Commandes pour Contract

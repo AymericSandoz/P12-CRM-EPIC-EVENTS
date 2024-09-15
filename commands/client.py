@@ -1,80 +1,88 @@
+import click
 from services.client_service import Client_services
 
 
-def add_client_commands(subparsers):
-    # get
-    subparsers.add_parser('get_clients')
-
-    get_client_parser = subparsers.add_parser('get_client')
-    get_client_parser.add_argument(
-        '--obj_id', type=int, required=True, help='ID of the client')
+@click.group(name='client')
+def client_cli():
+    """Commands for managing clients."""
+    pass
 
 
-# create
-    create_client_parser = subparsers.add_parser('create_client')
-    create_client_parser.add_argument(
-        '--full_name', required=True, help='Name of the client')
-    create_client_parser.add_argument(
-        '--email', required=True, help='Email of the client')
-    create_client_parser.add_argument(
-        '--phone', required=True, help='Phone number of the client')
-    create_client_parser.add_argument(
-        '--company_name', required=True, help='Company name of the client')
-    create_client_parser.add_argument(
-        '--last_update', help='Last contact date of the client')
-    create_client_parser.add_argument(
-        '--contact_person', required=True, help='Contact person of the client')
-
-    # update
-    update_client_parser = subparsers.add_parser('update_client')
-    update_client_parser.add_argument(
-        '--obj_id', type=int, required=True, help='ID of the client')
-    update_client_parser.add_argument(
-        '--full_name', help='Name of the client')
-    update_client_parser.add_argument(
-        '--email', help='Email of the client')
-    update_client_parser.add_argument(
-        '--phone', help='Phone number of the client')
-    update_client_parser.add_argument(
-        '--company_name', help='Company name of the client')
-    update_client_parser.add_argument(
-        '--last_update', help='Last contact date of the client')
-    update_client_parser.add_argument(
-        '--contact_person', help='Contact person of the client')
-
-    # delete
-    delete_client_parser = subparsers.add_parser('delete_client')
-    delete_client_parser.add_argument(
-        '--obj_id', type=int, required=True, help='ID of the client')
+def client_options(required=True):
+    """Decorator to add common client options to a command."""
+    def decorator(func):
+        func = click.option('--full_name', required=required,
+                            help='Name of the client')(func)
+        func = click.option('--email', required=required,
+                            help='Email of the client')(func)
+        func = click.option('--phone', required=required,
+                            help='Phone number of the client')(func)
+        func = click.option('--company_name', required=required,
+                            help='Company name of the client')(func)
+        func = click.option('--last_update', required=False,
+                            help='Last contact date of the client')(func)
+        func = click.option('--contact_person', required=required,
+                            help='Contact person of the client')(func)
+        return func
+    return decorator
 
 
-def handle_client_commands(args, args_dict):
-    if args.command == 'get_clients':
-        clients = Client_services.get_all()
-        if not clients:
-            print("No clients found.")
-        else:
-            print(f"There are {len(clients)} clients")
-            for client in clients:
-                print(f"Client ID: {client.id}, Name: {
-                      client.full_name}, Email: {client.email}")
-    elif args.command == 'get_client':
-        client = Client_services.get(args.obj_id)
-        if not client:
-            print("Client not found.")
-        else:
-            print(f"Client ID: {client.id}, Name: {
-                  client.full_name}, Email: {client.email}")
+@click.command(name='get_clients')
+def get_clients():
+    """Get all clients."""
+    clients = Client_services.get_all()
+    if not clients:
+        click.echo("No clients found.")
+    else:
+        click.echo(f"There are {len(clients)} clients")
+        for client in clients:
+            click.echo(f"Client ID: {client.id}, Name: {
+                       client.full_name}, Email: {client.email}")
 
-    elif args.command == 'create_client':
-        client_id, client_name = Client_services.create(
-            **args_dict)
-        print(f"Client {client_name} created successfully with ID {client_id}")
 
-    elif args.command == 'update_client':
-        client_name = Client_services.update(args.obj_id, **args_dict)
-        print(f"Client {client_name} updated successfully.")
+@click.command(name='get_client')
+@click.option('--obj_id', type=int, required=True, help='ID of the client')
+def get_client(obj_id):
+    """Get a client by ID."""
+    client = Client_services.get(obj_id)
+    if not client:
+        click.echo("Client not found.")
+    else:
+        click.echo(f"Client ID: {client.id}, Name: {
+                   client.full_name}, Email: {client.email}")
 
-    elif args.command == 'delete_client':
-        client_name = Client_services.delete(args.obj_id)
-        print(f"Client {client_name} deleted successfully.")
+
+@click.command(name='create_client')
+@client_options(required=True)
+def create_client(full_name, email, phone, company_name, last_update, contact_person):
+    """Create a new client."""
+    client_id, client_name = Client_services.create(
+        full_name=full_name, email=email, phone=phone, company_name=company_name, last_update=last_update, contact_person=contact_person)
+    click.echo(
+        f"Client {client_name} created successfully with ID {client_id}")
+
+
+@click.command(name='update_client')
+@click.option('--obj_id', type=int, required=True, help='ID of the client')
+@client_options(required=False)
+def update_client(obj_id, full_name, email, phone, company_name, last_update, contact_person):
+    """Update an existing client."""
+    client_name = Client_services.update(
+        client_id=obj_id, full_name=full_name, email=email, phone=phone, company_name=company_name, last_update=last_update, contact_person=contact_person)
+    click.echo(f"Client {client_name} updated successfully.")
+
+
+@click.command(name='delete_client')
+@click.option('--obj_id', type=int, required=True, help='ID of the client')
+def delete_client(obj_id):
+    """Delete a client by ID."""
+    client_name = Client_services.delete(obj_id)
+    click.echo(f"Client {client_name} deleted successfully.")
+
+
+# Ajout des commandes au groupe
+client_cli.add_command(get_clients)
+client_cli.add_command(get_client)
+client_cli.add_command(create_client)
+client_cli.add_command(update_client)
+client_cli.add_command(delete_client)

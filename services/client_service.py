@@ -12,12 +12,11 @@ class Client_services():
             last_update=last_update,
             contact_person=contact_person
         )
-        client_id = client.id
-        client_name = client.full_name
         session.add(client)
         session.commit()
+        client_id = client.id
         session.close()
-        return client_id, client_name
+        return client_id, full_name
 
     def get_all():
         session = Session()

@@ -1,82 +1,50 @@
-import argparse
-from commands.user import add_user_commands
-from commands.department import add_department_commands
-from commands.event import add_event_commands
-from commands.client import add_client_commands
-from commands.contract import add_contract_commands
+import click
 from services.auth import login, AuthenticationError
-from utils.jwt_utils import load_jwt
-from entities.entities import Commands
+# from commands.user import user_cli  # Import pour les commandes utilisateurs
+# # Import pour les commandes départements
+# from commands.department import department_cli
+# from commands.event import event_cli  # Import pour les commandes événements
+from commands.client import client_cli  # Import pour les commandes clients
+# from commands.contract import contract_cli  # Import pour les commandes contrats
 
 
-def main():
-    parser = argparse.ArgumentParser(description="Epic Events CRM CLI")
-
-    subparsers = parser.add_subparsers(dest='command')
-
-    # Ajout de la commande login
-    login_parser = subparsers.add_parser('login')
-    login_parser.add_argument('--email', required=True, help='Email for login')
-    login_parser.add_argument(
-        '--password', required=True, help='Password for login')
-
-    # logout command
-    subparsers.add_parser('logout')
-
-    # Token JWT
-    token_parser = subparsers.add_parser('add_token')
-    token_parser.add_argument('--token', required=True, help='Token JWT')
-
-    # Ajout des commandes pour les différents objets
-    add_user_commands(subparsers)
-    add_department_commands(subparsers)
-    add_event_commands(subparsers)
-    add_client_commands(subparsers)
-    add_contract_commands(subparsers)
-
-    # Ajout d'un argument obj_id pour les objets spécifiques
-    parser.add_argument('--obj_id', type=int, help="ID de l'objet")
-
-    args = parser.parse_args()
-
-    # login mandatory for all commands
-    # if args.command not in ['login']:
-    #     print("Please login first")
-    #     return
-
-    if args.command == 'logout':
-        return
-
-    elif args.command == 'login':
-        try:
-            token = login(args.email, args.password)
-            return
-        except AuthenticationError as e:
-            print(f"Invalid credentials: {e}")
-            return
-
-    elif args.command == 'add_token':
-        token = args.token
-
-    else:
-        token = load_jwt()
-
-        if not token:
-            print("You need to login or add a token first.")
-            return
-
-    # Vérification des permissions avant d'exécuter la commande
-    # if args.command in Commands.COMMANDS_PERMISSIONS:
-    #     action, obj_type = Commands.COMMANDS_PERMISSIONS[args.command]
-
-    #     # Vérification d'un `obj_id` si nécessaire pour les objets spécifiques
-    #     obj_id = args.obj_id
-    #     if not check_authorization(token, action, obj_type, obj_id):
-    #         print("Unauthorized access.")
-    #         return
-
-    Commands.handle_command(args)
+@click.group()
+def cli():
+    """Epic Events CRM CLI."""
+    pass
 
 
-if __name__ == "__main__":
-    main()
+@cli.command()
+@click.argument('email')
+@click.argument('password')
+def login_cli(email, password):
+    """Login to the system."""
+    try:
+        token = login(email, password)
+        click.echo(f"Login successful. JWT token: {token}")
+    except AuthenticationError:
+        click.echo("Invalid credentials.")
+
+
+@cli.command()
+def logout_cli():
+    """Logout from the system."""
+    click.echo("Logged out.")
+
+
+@cli.command()
+@click.argument('token')
+def add_token_cli(token):
+    """Add a JWT token."""
+    click.echo(f"Token added: {token}")
+
+
+# Ajouter les sous-groupes de commandes pour les différentes entités
+cli.add_command(client_cli)
+# cli.add_command(user_cli)
+# cli.add_command(department_cli)
+# cli.add_command(event_cli)
+# cli.add_command(contract_cli)
+
+if __name__ == '__main__':
+    cli()
