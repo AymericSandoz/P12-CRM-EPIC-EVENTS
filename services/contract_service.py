@@ -2,19 +2,24 @@ from models import Contract, Session
 
 
 class Contract_services():
-    def create(name, start_date, end_date, client_id, amount, notes):
+    def create(client_id, total_amount, amount_due, commercial_contact_id, is_signed=False):
         session = Session()
         contract = Contract(
-            contract_name=name,
-            contract_start_date=start_date,
-            contract_end_date=end_date,
             client_id=client_id,
-            contract_amount=amount,
-            notes=notes
+            total_amount=total_amount,
+            amount_due=amount_due,
+            commercial_contact_id=commercial_contact_id,
+            is_signed=is_signed
         )
+
         session.add(contract)
         session.commit()
+
+        contract_id = contract.id
+        client_id = contract.client_id
+
         session.close()
+        return contract_id, client_id
 
     def get_all():
         session = Session()
@@ -35,7 +40,7 @@ class Contract_services():
             setattr(contract, key, value)
         session.commit()
         session.close()
-        return contract
+        return contract_id
 
     def delete(contract_id):
         session = Session()
@@ -43,4 +48,4 @@ class Contract_services():
         session.delete(contract)
         session.commit()
         session.close()
-        return contract
+        return contract_id

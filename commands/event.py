@@ -13,11 +13,14 @@ def add_event_commands(subparsers):
     create_event_parser.add_argument(
         '--name', required=True, help='Name of the event')
     create_event_parser.add_argument(
-        '--date', required=True, help='Date of the event')
+        '--event_start_date', required=True, help='Start date of the event')
     create_event_parser.add_argument(
-        '--contract_id', type=int, required=True, help='Contract ID for the event')
+        '--event_end_date', required=True, help='End date of the event')
     create_event_parser.add_argument(
         '--client_id', type=int, required=True, help='Client ID for the event')
+
+    create_event_parser.add_argument(
+        '--contract_id', type=int, required=True, help='Contract ID for the event')
     create_event_parser.add_argument(
         '--support_contact', required=True, help='Support contact for the event')
     create_event_parser.add_argument(
@@ -55,7 +58,7 @@ def add_event_commands(subparsers):
         '--obj_id', type=int, required=True, help='ID of the event')
 
 
-def handle_event_commands(args):
+def handle_event_commands(args, args_dict):
     if args.command == 'get_events':
         events = Event_services.get_all()
         if not events:
@@ -64,32 +67,21 @@ def handle_event_commands(args):
             print(f"There are {len(events)} events")
             for event in events:
                 print(f"Event ID: {event.id}, Name: {
-                      event.name}, Date: {event.date}")
+                      event.event_name}, Date: {event.event_start_date}")
     elif args.command == 'get_event':
-        event = Event_services.get(args.event_id)
+        event = Event_services.get(args.obj_id)
         if not event:
             print("Event not found.")
         else:
             print(f"Event ID: {event.id}, Name: {
-                  event.name}, Date: {event.date}")
+                  event.event_name}, Date: {event.event_start_date}")
 
     elif args.command == 'create_event':
-        event_id, event_name = Event_services.create(
-            name=args.name,
-            date=args.date,
-            contract_id=args.contract_id,
-            client_id=args.client_id,
-            support_contact=args.support_contact,
-            location=args.location,
-            attendees=args.attendees,
-            notes=args.notes
-        )
+        event_id, event_name = Event_services.create(**args_dict
+                                                     )
         print(f"Event {event_name} created successfully with ID {event_id}")
 
     elif args.command == 'update_event':
-        # convertir avec vars mais enlever les valeurs nulles, obj id et command
-        args_dict = {k: v for k, v in vars(args).items(
-        ) if v is not None and k not in ['obj_id', 'command']}
         event_name = Event_services.update(args.obj_id, **args_dict)
         print(f"Event {event_name} updated successfully")
 

@@ -11,6 +11,7 @@ from entities.entities import Commands
 
 def main():
     parser = argparse.ArgumentParser(description="Epic Events CRM CLI")
+
     subparsers = parser.add_subparsers(dest='command')
 
     # Ajout de la commande login

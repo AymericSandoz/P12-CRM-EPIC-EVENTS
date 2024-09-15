@@ -38,17 +38,14 @@ def add_user_commands(subparsers):
     subparsers.add_parser('delete_user')
 
 
-def handle_user_commands(args):
+def handle_user_commands(args, args_dict):
     if args.command == 'create_user':
         user_id, user_name = User_Services.create(
             employee_number=args.employee_number,
             name=args.name,
             email=args.email,
             department_id=args.department_id,
-            password=args.password,
-            can_create_clients=args.can_create_clients,
-            can_modify_contracts=args.can_modify_contracts,
-            can_assign_events=args.can_assign_events
+            password=args.password
         )
         print(f"User {user_name} created successfully with ID {user_id}")
     elif args.command == 'get_users':
@@ -61,7 +58,7 @@ def handle_user_commands(args):
                 print(f"User ID: {user.id}, Name: {
                       user.name}, Email: {user.email}")
     elif args.command == 'get_user':
-        user = User_Services.get(args.user_id)
+        user = User_Services.get(args.obj_id)
         if not user:
             print("User not found.")
         else:
@@ -69,9 +66,6 @@ def handle_user_commands(args):
                   user.name}, Email: {user.email}")
 
     elif args.command == 'update_user':
-        # convertir avec vars mais enlever les valeurs nulles, obj id et command
-        args_dict = {k: v for k, v in vars(args).items(
-        ) if v is not None and k not in ['obj_id', 'command']}
         username = User_Services.update(args.obj_id, **args_dict)
         print(f"User {username} updated successfully.")
 

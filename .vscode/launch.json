@@ -1,102 +1,28 @@
-// {
-//   "version": "0.2.0",
-//   "configurations": [
-//     {
-//       "name": "Python: Login",
-//       "type": "python",
-//       "request": "launch",
-//       "program": "${workspaceFolder}/main_2.py",
-//       "console": "integratedTerminal",
-//       "args": [
-//         "login",
-//         "--email",
-//         "luc@example.com",
-//         "--password",
-//         "securepassword"
-//       ]
-//     },
-//     {
-//       "name": "Python: Get Users",
-//       "type": "python",
-//       "request": "launch",
-//       "program": "${workspaceFolder}/main_2.py",
-//       "console": "integratedTerminal",
-//       "args": ["get_users"]
-//     },
-//     {
-//       "name": "Python: Get User",
-//       "type": "python",
-//       "request": "launch",
-//       "program": "${workspaceFolder}/main_2.py",
-//       "console": "integratedTerminal",
-//       "args": ["get_user", "--user_id", "1"]
-//     },
-//     {
-//       "name": "Python: update User",
-//       "type": "python",
-//       "request": "launch",
-//       "program": "${workspaceFolder}/main_2.py",
-//       "console": "integratedTerminal",
-//       "args": [
-//         "update_user",
-//         "--obj_id",
-//         "2",
-//         "--email",
-//         "john.update1@example.com"
-//       ]
-//     },
-//     {
-//       "name": "Python: get contracts",
-//       "type": "python",
-//       "request": "launch",
-//       "program": "${workspaceFolder}/main_2.py",
-//       "console": "integratedTerminal",
-//       "args": ["get_contracts"]
-//     },
-//     {
-//       "name": "Python: create contracts",
-//       "type": "python",
-//       "request": "launch",
-//       "program": "${workspaceFolder}/main_2.py",
-//       "console": "integratedTerminal",
-//       "args": [
-//         "create_contract",
-//         "--client_id",
-//         "2",
-//         "--total_amount",
-//         "100",
-//         "--amount_due",
-//         "100"
-//       ]
-//     },
-//     {
-//       "name": "Python: Create Client",
-//       "type": "python",
-//       "request": "launch",
-//       "program": "${workspaceFolder}/main_2.py",
-//       "console": "integratedTerminal",
-//       "args": [
-//         "create_client",
-//         "--name",
-//         "John",
-//         "--email",
-//         "john@example.com",
-//         "--phone",
-//         "1234567890",
-//         "--company_name",
-//         "John's Company",
-//         "--contact_person",
-//         "John Doe",
-//         "--last_contact_date",
-//         "2024-09-01"
-//       ]
-//     }
-//   ]
-// }
-
 {
   "version": "0.2.0",
   "configurations": [
+    {
+      "name": "Python: Test récupération Models",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": ["test"]
+    },
+    {
+      "name": "Python: Login",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": [
+        "login",
+        "--email",
+        "luc@example.com",
+        "--password",
+        "securepassword"
+      ]
+    },
     // Commandes pour User
     {
       "name": "Python: Get Users",
@@ -112,7 +38,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["get_user", "--obj_id", "1"]
+      "args": ["get_user", "--obj_id", "2"]
     },
     {
       "name": "Python: Create User",
@@ -123,15 +49,15 @@
       "args": [
         "create_user",
         "--employee_number",
-        "001",
+        "783",
         "--name",
-        "John Doe",
+        "frank Doe",
         "--email",
-        "john@example.com",
+        "frank@example.com",
         "--password",
         "password123",
         "--department_id",
-        "1"
+        "7"
       ]
     },
     {
@@ -140,13 +66,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": [
-        "update_user",
-        "--obj_id",
-        "1",
-        "--email",
-        "john.update@example.com"
-      ]
+      "args": ["update_user", "--obj_id", "5", "--email", "dd@example.com"]
     },
     {
       "name": "Python: Delete User",
@@ -183,9 +103,9 @@
       "args": [
         "create_client",
         "--full_name",
-        "zzzzzzzzz Corp",
+        "dddddddddd Corp",
         "--email",
-        "cliezzsssszzzzzzzzzzznt@example.com",
+        "cliedddddzzsssszzzzzzzzzzznt@example.com",
         "--phone",
         "0123456789",
         "--company_name",
@@ -249,7 +169,9 @@
         "--total_amount",
         "5000",
         "--amount_due",
-        "1000"
+        "1000",
+        "--commercial_contact_id",
+        "6"
       ]
     },
     {
@@ -284,7 +206,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["get_event", "--obj_id", "1"]
+      "args": ["get_event", "--obj_id", "2"]
     },
     {
       "name": "Python: Create Event",
@@ -294,12 +216,12 @@
       "console": "integratedTerminal",
       "args": [
         "create_event",
+        "--name",
+        "Annual Meeting",
         "--contract_id",
-        "1",
+        "2",
         "--client_id",
         "1",
-        "--event_name",
-        "Annual Meeting",
         "--event_start_date",
         "2024-09-15",
         "--event_end_date",
@@ -318,13 +240,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": [
-        "update_event",
-        "--obj_id",
-        "1",
-        "--event_name",
-        "Updated Meeting"
-      ]
+      "args": ["update_event", "--obj_id", "2", "--name", "Updated Meeting"]
     },
     {
       "name": "Python: Delete Event",
@@ -332,7 +248,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["delete_event", "--obj_id", "1"]
+      "args": ["delete_event", "--obj_id", "2"]
     },
 
     // Commandes pour Department

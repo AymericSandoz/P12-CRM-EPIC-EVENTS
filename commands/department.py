@@ -23,7 +23,7 @@ def add_department_commands(subparsers):
         '--obj_id', type=int, required=True, help='ID of the department')
 
 
-def handle_department_commands(args):
+def handle_department_commands(args, args_dict):
     if args.command == 'create_department':
         department_id, department_name = Department_services.create(
             name=args.name)
@@ -39,16 +39,13 @@ def handle_department_commands(args):
                 print(f"Department ID: {
                       department.id}, Name: {department.name}")
     elif args.command == 'get_department':
-        department = Department_services.get(args.department_id)
+        department = Department_services.get(args.obj_id)
         if not department:
             print("Department not found.")
         else:
             print(f"Department ID: {department.id}, Name: {department.name}")
 
     elif args.command == 'update_department':
-        # convertir avec vars mais enlever les valeurs nulles, obj id et command
-        args_dict = {k: v for k, v in vars(args).items(
-        ) if v is not None and k not in ['obj_id', 'command']}
         department_name = Department_services.update(
             obj_id=args.obj_id,
             **args_dict

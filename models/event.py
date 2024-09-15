@@ -10,7 +10,7 @@ class Event(Base):
     id = Column(Integer, primary_key=True)
     contract_id = Column(Integer, ForeignKey('contracts.id'), nullable=False)
     client_id = Column(Integer, ForeignKey('clients.id'), nullable=False)
-    event_name = Column(String(255), nullable=False)
+    event_name = Column(String(100), nullable=False)
     event_start_date = Column(Date, nullable=False)
     event_end_date = Column(Date, nullable=False)
     support_contact = Column(String(255), nullable=False)
@@ -20,3 +20,11 @@ class Event(Base):
 
     client = relationship('Client', back_populates='events')
     contract = relationship('Contract', back_populates='events')
+
+    @property
+    def client_name(self):
+        return self.client.full_name
+
+    @property
+    def client_contact(self):
+        return f"{self.client.phone}, {self.client.email}"

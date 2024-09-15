@@ -2,14 +2,14 @@ from models import Event, Session
 
 
 class Event_services():
-    def create(name, date, contract_id, client_id, support_contact, location, attendees, notes):
+    def create(name, event_start_date, event_end_date, client_id, contract_id, support_contact, location, attendees, notes=None):
         session = Session()
         event = Event(
             event_name=name,
-            event_start_date=date,
-            event_end_date=date,
             contract_id=contract_id,
             client_id=client_id,
+            event_start_date=event_start_date,
+            event_end_date=event_end_date,
             support_contact=support_contact,
             location=location,
             attendees=attendees,
