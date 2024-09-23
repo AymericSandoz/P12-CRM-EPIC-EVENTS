@@ -33,8 +33,14 @@ class Client_services():
     def update(client_id, **kwargs):
         session = Session()
         client = session.query(Client).filter_by(id=client_id).first()
-        for key, value in kwargs.items():
+
+        # Filtrer les champs non nuls
+        filtered_kwargs = {key: value for key,
+                           value in kwargs.items() if value is not None}
+
+        for key, value in filtered_kwargs.items():
             setattr(client, key, value)
+
         client_name = client.full_name
         session.commit()
         session.close()

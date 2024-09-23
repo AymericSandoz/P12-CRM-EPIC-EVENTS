@@ -30,7 +30,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["get_users"]
+      "args": ["user", "get_users"]
     },
     {
       "name": "Python: Get User",
@@ -38,7 +38,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["get_user", "--obj_id", "2"]
+      "args": ["user", "get_user", "--obj_id", "2"]
     },
     {
       "name": "Python: Create User",
@@ -47,13 +47,14 @@
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
       "args": [
+        "user",
         "create_user",
         "--employee_number",
-        "783",
+        "121",
         "--name",
         "frank Doe",
         "--email",
-        "frank@example.com",
+        "luc2@example.com",
         "--password",
         "password123",
         "--department_id",
@@ -66,7 +67,14 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["update_user", "--obj_id", "5", "--email", "dd@example.com"]
+      "args": [
+        "user",
+        "update_user",
+        "--obj_id",
+        "9",
+        "--email",
+        "ggggggggggg@example.com"
+      ]
     },
     {
       "name": "Python: Delete User",
@@ -74,7 +82,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["delete_user", "--obj_id", "1"]
+      "args": ["user", "delete_user", "--obj_id", "9"]
     },
 
     // Commandes pour Client
@@ -129,7 +137,7 @@
         "--obj_id",
         "1",
         "--full_name",
-        "Acme Updated Corp"
+        "test test Updated Corp"
       ]
     },
     {
@@ -148,7 +156,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["get_contracts"]
+      "args": ["contract", "get_contracts"]
     },
     {
       "name": "Python: Get Contract",
@@ -156,7 +164,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["get_contract", "--obj_id", "1"]
+      "args": ["contract", "get_contract", "--obj_id", "1"]
     },
     {
       "name": "Python: Create Contract",
@@ -165,6 +173,7 @@
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
       "args": [
+        "contract",
         "create_contract",
         "--client_id",
         "1",
@@ -182,7 +191,14 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["update_contract", "--obj_id", "1", "--total_amount", "6000"]
+      "args": [
+        "contract",
+        "update_contract",
+        "--obj_id",
+        "1",
+        "--total_amount",
+        "6000"
+      ]
     },
     {
       "name": "Python: Delete Contract",
@@ -190,7 +206,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["delete_contract", "--obj_id", "1"]
+      "args": ["contract", "delete_contract", "--obj_id", "1"]
     },
 
     // Commandes pour Event
@@ -200,7 +216,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["get_events"]
+      "args": ["event", "get_events"]
     },
     {
       "name": "Python: Get Event",
@@ -208,7 +224,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["get_event", "--obj_id", "2"]
+      "args": ["event", "get_event", "--obj_id", "2"]
     },
     {
       "name": "Python: Create Event",
@@ -217,6 +233,7 @@
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
       "args": [
+        "event",
         "create_event",
         "--name",
         "Annual Meeting",
@@ -242,7 +259,14 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["update_event", "--obj_id", "2", "--name", "Updated Meeting"]
+      "args": [
+        "event",
+        "update_event",
+        "--obj_id",
+        "2",
+        "--name",
+        "Updated Meeting"
+      ]
     },
     {
       "name": "Python: Delete Event",
@@ -250,7 +274,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["delete_event", "--obj_id", "2"]
+      "args": ["event", "delete_event", "--obj_id", "2"]
     },
 
     // Commandes pour Department
@@ -260,7 +284,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["get_departments"]
+      "args": ["department", "get_departments"]
     },
     {
       "name": "Python: Get Department",
@@ -268,7 +292,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["get_department", "--obj_id", "1"]
+      "args": ["department", "get_department", "--obj_id", "1"]
     },
     {
       "name": "Python: Create Department",
@@ -276,7 +300,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["create_department", "--name", "Finance"]
+      "args": ["department", "create_department", "--name", "Finance"]
     },
     {
       "name": "Python: Update Department",
@@ -284,7 +308,14 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["update_department", "--obj_id", "1", "--name", "Operations"]
+      "args": [
+        "department",
+        "update_department",
+        "--obj_id",
+        "1",
+        "--name",
+        "Operations"
+      ]
     },
     {
       "name": "Python: Delete Department",
@@ -292,7 +323,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["delete_department", "--obj_id", "1"]
+      "args": ["department", "delete_department", "--obj_id", "1"]
     }
   ]
 }
