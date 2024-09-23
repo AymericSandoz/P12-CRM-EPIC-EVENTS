@@ -164,7 +164,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["contract", "get_contract", "--obj_id", "1"]
+      "args": ["contract", "get_contract", "--obj_id", "2"]
     },
     {
       "name": "Python: Create Contract",
@@ -195,7 +195,7 @@
         "contract",
         "update_contract",
         "--obj_id",
-        "1",
+        "2",
         "--total_amount",
         "6000"
       ]
@@ -206,7 +206,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["contract", "delete_contract", "--obj_id", "1"]
+      "args": ["contract", "delete_contract", "--obj_id", "3"]
     },
 
     // Commandes pour Event
@@ -235,8 +235,8 @@
       "args": [
         "event",
         "create_event",
-        "--name",
-        "Annual Meeting",
+        "--event_name",
+        "Annual dauheeeeee",
         "--contract_id",
         "2",
         "--client_id",
@@ -263,8 +263,8 @@
         "event",
         "update_event",
         "--obj_id",
-        "2",
-        "--name",
+        "3",
+        "--event_name",
         "Updated Meeting"
       ]
     },
@@ -274,7 +274,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
-      "args": ["event", "delete_event", "--obj_id", "2"]
+      "args": ["event", "delete_event", "--obj_id", "4"]
     },
 
     // Commandes pour Department

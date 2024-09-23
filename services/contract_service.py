@@ -36,7 +36,10 @@ class Contract_services():
     def update(contract_id, **kwargs):
         session = Session()
         contract = session.query(Contract).filter_by(id=contract_id).first()
-        for key, value in kwargs.items():
+
+        filtered_kwargs = {key: value for key,
+                           value in kwargs.items() if value is not None}
+        for key, value in filtered_kwargs.items():
             setattr(contract, key, value)
         session.commit()
         session.close()

@@ -1,11 +1,10 @@
 import click
 from services.auth import login, AuthenticationError
 from commands.user import user_cli  # Import pour les commandes utilisateurs
-# # Import pour les commandes départements
-# from commands.department import department_cli
-# from commands.event import event_cli  # Import pour les commandes événements
+from commands.department import department_cli
+from commands.event import event_cli  # Import pour les commandes événements
 from commands.client import client_cli  # Import pour les commandes clients
-# from commands.contract import contract_cli  # Import pour les commandes contrats
+from commands.contract import contract_cli  # Import pour les commandes contrats
 
 
 @click.group()
@@ -42,9 +41,9 @@ def add_token_cli(token):
 # Ajouter les sous-groupes de commandes pour les différentes entités
 cli.add_command(client_cli)
 cli.add_command(user_cli)
-# cli.add_command(department_cli)
-# cli.add_command(event_cli)
-# cli.add_command(contract_cli)
+cli.add_command(department_cli)
+cli.add_command(event_cli)
+cli.add_command(contract_cli)
 
 if __name__ == '__main__':
     cli()

@@ -1,90 +1,92 @@
 from services.event_service import Event_services
+import click
 
 
-def add_event_commands(subparsers):
-    get_event_parser = subparsers.add_parser('get_event')
-    get_event_parser.add_argument(
-        '--obj_id', type=int, required=True, help='ID of the event')
-
-    subparsers.add_parser('get_events')
-
-    # contract_id, client_id, event_name, event_start_date, event_end_date, support_contact, location, attendees, notes
-    create_event_parser = subparsers.add_parser('create_event')
-    create_event_parser.add_argument(
-        '--name', required=True, help='Name of the event')
-    create_event_parser.add_argument(
-        '--event_start_date', required=True, help='Start date of the event')
-    create_event_parser.add_argument(
-        '--event_end_date', required=True, help='End date of the event')
-    create_event_parser.add_argument(
-        '--client_id', type=int, required=True, help='Client ID for the event')
-
-    create_event_parser.add_argument(
-        '--contract_id', type=int, required=True, help='Contract ID for the event')
-    create_event_parser.add_argument(
-        '--support_contact', required=True, help='Support contact for the event')
-    create_event_parser.add_argument(
-        '--location', required=True, help='Location of the event')
-    create_event_parser.add_argument(
-        '--attendees', type=int, required=True, help='Number of attendees')
-    create_event_parser.add_argument(
-        '--notes', required=False, help='Notes for the event')
-
-    update_event_parser = subparsers.add_parser('update_event')
-    update_event_parser.add_argument(
-        '--obj_id', type=int, required=True, help='ID of the event')
-    update_event_parser.add_argument(
-        '--name', help='Name of the event')
-    update_event_parser.add_argument(
-        '--date', help='Date of the event')
-    update_event_parser.add_argument(
-        '--contract_id', type=int, help='Contract ID for the event')
-    update_event_parser.add_argument(
-        '--client_id', type=int, help='Client ID for the event')
-    update_event_parser.add_argument(
-        '--support_contact', help='Support contact for the event')
-
-    update_event_parser.add_argument(
-        '--location', help='Location of the event')
-
-    update_event_parser.add_argument(
-        '--attendees', type=int, help='Number of attendees')
-
-    update_event_parser.add_argument(
-        '--notes', help='Notes for the event')
-
-    delete_event_parser = subparsers.add_parser('delete_event')
-    delete_event_parser.add_argument(
-        '--obj_id', type=int, required=True, help='ID of the event')
+@click.group(name='event')
+def event_cli():
+    """Manage events."""
+    pass
 
 
-def handle_event_commands(args, args_dict):
-    if args.command == 'get_events':
-        events = Event_services.get_all()
-        if not events:
-            print("No events found.")
-        else:
-            print(f"There are {len(events)} events")
-            for event in events:
-                print(f"Event ID: {event.id}, Name: {
-                      event.event_name}, Date: {event.event_start_date}")
-    elif args.command == 'get_event':
-        event = Event_services.get(args.obj_id)
-        if not event:
-            print("Event not found.")
-        else:
-            print(f"Event ID: {event.id}, Name: {
-                  event.event_name}, Date: {event.event_start_date}")
+def event_options(required=True):
+    def decorator(func):
+        func = click.option('--event_name', required=required,
+                            help='Name of the event')(func)
+        func = click.option('--event_start_date', required=required,
+                            help='Start date of the event')(func)
+        func = click.option('--event_end_date', required=required,
+                            help='End date of the event')(func)
+        func = click.option('--client_id', type=int, required=required,
+                            help='Client ID for the event')(func)
+        func = click.option('--contract_id', type=int, required=required,
+                            help='Contract ID for the event')(func)
+        func = click.option('--support_contact', required=required,
+                            help='Support contact for the event')(func)
+        func = click.option('--location', required=required,
+                            help='Location of the event')(func)
+        func = click.option('--attendees', type=int, required=required,
+                            help='Number of attendees')(func)
+        func = click.option('--notes', required=False,
+                            help='Notes for the event')(func)
+        return func
+    return decorator
 
-    elif args.command == 'create_event':
-        event_id, event_name = Event_services.create(**args_dict
-                                                     )
-        print(f"Event {event_name} created successfully with ID {event_id}")
 
-    elif args.command == 'update_event':
-        event_name = Event_services.update(args.obj_id, **args_dict)
-        print(f"Event {event_name} updated successfully")
+@click.command(name='get_events')
+def get_events():
+    """Get all events."""
+    events = Event_services.get_all()
+    if not events:
+        click.echo("No events found.")
+    else:
+        click.echo(f"There are {len(events)} events")
+        for event in events:
+            click.echo(f"Event ID: {event.id}, Name: {
+                       event.event_name}, Date: {event.event_start_date}")
 
-    elif args.command == 'delete_event':
-        event_name = Event_services.delete(args.obj_id)
-        print(f"Event {event_name} deleted successfully")
+
+@click.command(name='get_event')
+@click.option('--obj_id', type=int, required=True, help='ID of the event')
+def get_event(obj_id):
+    """Get an event by ID."""
+    event = Event_services.get(obj_id)
+    if not event:
+        click.echo("Event not found.")
+    else:
+        click.echo(f"Event ID: {event.id}, Name: {
+                   event.event_name}, Date: {event.event_start_date}")
+
+
+@click.command(name='create_event')
+@event_options(required=True)
+def create_event(event_name, event_start_date, event_end_date, client_id, contract_id, support_contact, location, attendees, notes):
+    """Create a new event."""
+    event_id, event_name = Event_services.create(
+        event_name=event_name, event_start_date=event_start_date, event_end_date=event_end_date, client_id=client_id, contract_id=contract_id, support_contact=support_contact, location=location, attendees=attendees, notes=notes)
+    click.echo(
+        f"Event {event_name} created successfully with ID {event_id}")
+
+
+@click.command(name='update_event')
+@click.option('--obj_id', type=int, required=True, help='ID of the event')
+@event_options(required=False)
+def update_event(obj_id, event_name, event_start_date, event_end_date, client_id, contract_id, support_contact, location, attendees, notes):
+    """Update an existing event."""
+    event_name = Event_services.update(
+        obj_id, event_name=event_name, event_start_date=event_start_date, event_end_date=event_end_date, client_id=client_id, contract_id=contract_id, support_contact=support_contact, location=location, attendees=attendees, notes=notes)
+    click.echo(f"Event {event_name} updated successfully.")
+
+
+@click.command(name='delete_event')
+@click.option('--obj_id', type=int, required=True, help='ID of the event')
+def delete_event(obj_id):
+    """Delete an event by ID."""
+    event_name = Event_services.delete(obj_id)
+    click.echo(f"Event {event_name} deleted successfully.")
+
+
+event_cli.add_command(get_events)
+event_cli.add_command(get_event)
+event_cli.add_command(create_event)
+event_cli.add_command(update_event)
+event_cli.add_command(delete_event)
