@@ -1,58 +1,73 @@
 from services.department_service import Department_services
+import click
 
 
-def add_department_commands(subparsers):
-    create_department_parser = subparsers.add_parser('create_department')
-    create_department_parser.add_argument(
-        '--name', required=True, help='Name of the department')
-
-    get_department_parser = subparsers.add_parser('get_department')
-    get_department_parser.add_argument(
-        '--obj_id', type=int, required=True, help='ID of the department')
-
-    subparsers.add_parser('get_departments')
-
-    update_department_parser = subparsers.add_parser('update_department')
-    update_department_parser.add_argument(
-        '--obj_id', type=int, required=True, help='ID of the department')
-    update_department_parser.add_argument(
-        '--name', help='Name of the department')
-
-    delete_department_parser = subparsers.add_parser('delete_department')
-    delete_department_parser.add_argument(
-        '--obj_id', type=int, required=True, help='ID of the department')
+@click.group(name='department')
+def department_cli():
+    """Manage departments."""
+    pass
 
 
-def handle_department_commands(args, args_dict):
-    if args.command == 'create_department':
-        department_id, department_name = Department_services.create(
-            name=args.name)
-        print(f"Department {department_name} created successfully with ID {
-              department_id}")
-    elif args.command == 'get_departments':
-        departments = Department_services.get_all()
-        if not departments:
-            print("No departments found.")
-        else:
-            print(f"There are {len(departments)} departments")
-            for department in departments:
-                print(f"Department ID: {
-                      department.id}, Name: {department.name}")
-    elif args.command == 'get_department':
-        department = Department_services.get(args.obj_id)
-        if not department:
-            print("Department not found.")
-        else:
-            print(f"Department ID: {department.id}, Name: {department.name}")
+def department_options(required=False):
+    def decorator(f):
+        f = click.option('--name', required=required,
+                         help='Name of the department')(f)
+        return f
+    return decorator
 
-    elif args.command == 'update_department':
-        department_name = Department_services.update(
-            obj_id=args.obj_id,
-            **args_dict
-        )
-        print(f"Department {department_name} updated successfully with ID {
-              department_id}")
 
-    elif args.command == 'delete_department':
-        department_name = Department_services.delete(args.obj_id)
-        print(f"Department {department_name} deleted successfully")
+@department_cli.command(name='get_departments')
+def get_departments():
+    """Get all departments."""
+    departments = Department_services.get_all()
+    if not departments:
+        click.echo("No departments found.")
+    else:
+        click.echo(f"There are {len(departments)} departments")
+        for department in departments:
+            click.echo(f"Department ID: {
+                       department.id}, Name: {department.name}")
+
+
+@department_cli.command(name='get_department')
+@click.option('--obj_id', type=int, required=True, help='ID of the department')
+def get_department(obj_id):
+    """Get a department by ID."""
+    department = Department_services.get(obj_id)
+    if not department:
+        click.echo("Department not found.")
+    else:
+        click.echo(f"Department ID: {department.id}, Name: {department.name}")
+
+
+@department_cli.command(name='create_department')
+@department_options(required=True)
+def create_department(name):
+    """Create a new department."""
+    department_id, department_name = Department_services.create(name=name)
+    click.echo(f"Department {department_name} created successfully with ID {
+               department_id}")
+
+
+@department_cli.command(name='update_department')
+@click.option('--obj_id', type=int, required=True, help='ID of the department')
+@department_options(required=False)
+def update_department(obj_id, name):
+    """Update an existing department."""
+    department_name = Department_services.update(obj_id, name=name)
+    click.echo(f"Department {department_name} updated successfully.")
+
+
+@department_cli.command(name='delete_department')
+@click.option('--obj_id', type=int, required=True, help='ID of the department')
+def delete_department(obj_id):
+    """Delete a department by ID."""
+    department_name = Department_services.delete(obj_id)
+    click.echo(f"Department {department_name} deleted successfully.")
+
+
+department_cli.add_command(get_departments)
+department_cli.add_command(get_department)
+department_cli.add_command(create_department)
+department_cli.add_command(update_department)
+department_cli.add_command(delete_department)

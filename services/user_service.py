@@ -37,7 +37,10 @@ class User_Services():
     def update(user_id, **kwargs):
         session = Session()
         user = session.query(User).filter_by(id=user_id).first()
-        for key, value in kwargs.items():
+
+        filtered_kwargs = {key: value for key,
+                           value in kwargs.items() if value is not None}
+        for key, value in filtered_kwargs.items():
             setattr(user, key, value)
         session.commit()
         user_id = user.id

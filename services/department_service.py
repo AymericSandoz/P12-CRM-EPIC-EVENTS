@@ -30,7 +30,9 @@ class Department_services():
         session = Session()
         department = session.query(Department).filter_by(
             id=department_id).first()
-        for key, value in kwargs.items():
+        filtered_kwargs = {key: value for key,
+                           value in kwargs.items() if value is not None}
+        for key, value in filtered_kwargs.items():
             setattr(department, key, value)
         session.commit()
         session.close()
