@@ -1,4 +1,5 @@
 from models import Contract, Session
+from sentry.log import log_action
 
 
 class Contract_services():
@@ -16,16 +17,27 @@ class Contract_services():
         session.commit()
 
         contract_id = contract.id
-        client_id = contract.client_id
+        contract_info = {
+            'client_id': contract.client_id,
+            'total_amount': contract.total_amount,
+            'amount_due': contract.amount_due,
+            'commercial_contact_id': contract.commercial_contact_id,
+            'is_signed': contract.is_signed
+        }
 
         session.close()
+
+        # Log the action
+        log_action('create', 'contract', obj_id=contract_id,
+                   extra_info=contract_info)
+
         return contract_id, client_id
 
     def get_all():
         session = Session()
-        contract = session.query(Contract).all()
+        contracts = session.query(Contract).all()
         session.close()
-        return contract
+        return contracts
 
     def get(contract_id):
         session = Session()
@@ -42,13 +54,38 @@ class Contract_services():
         for key, value in filtered_kwargs.items():
             setattr(contract, key, value)
         session.commit()
+        contract_info = {
+            'client_id': contract.client_id,
+            'total_amount': contract.total_amount,
+            'amount_due': contract.amount_due,
+            'commercial_contact_id': contract.commercial_contact_id,
+            'is_signed': contract.is_signed,
+            'updated_fields': filtered_kwargs
+        }
         session.close()
+
+        # Log the action
+        log_action('update', 'contract', obj_id=contract_id,
+                   extra_info=contract_info)
+
         return contract_id
 
     def delete(contract_id):
         session = Session()
         contract = session.query(Contract).filter_by(id=contract_id).first()
+        contract_info = {
+            'client_id': contract.client_id,
+            'total_amount': contract.total_amount,
+            'amount_due': contract.amount_due,
+            'commercial_contact_id': contract.commercial_contact_id,
+            'is_signed': contract.is_signed
+        }
         session.delete(contract)
         session.commit()
         session.close()
+
+        # Log the action
+        log_action('delete', 'contract', obj_id=contract_id,
+                   extra_info=contract_info)
+
         return contract_id

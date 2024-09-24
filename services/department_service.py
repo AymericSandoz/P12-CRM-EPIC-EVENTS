@@ -1,4 +1,5 @@
 from models import Session, Department
+from sentry.log import log_action
 
 
 class Department_services():
@@ -7,11 +8,17 @@ class Department_services():
         new_department = Department(name=name)
         session.add(new_department)
         session.commit()
-        # Accédez aux attributs avant de fermer la session
         department_id = new_department.id
-        department_name = new_department.name
+        department_info = {
+            'name': new_department.name
+        }
         session.close()
-        return department_id, department_name
+
+        # Log the action
+        log_action('create', 'department', obj_id=department_id,
+                   extra_info=department_info)
+
+        return department_id, new_department.name
 
     def get_all():
         session = Session()
@@ -35,14 +42,31 @@ class Department_services():
         for key, value in filtered_kwargs.items():
             setattr(department, key, value)
         session.commit()
+        department_info = {
+            'name': department.name,
+            'updated_fields': filtered_kwargs
+        }
         session.close()
+
+        # Log the action
+        log_action('update', 'department', obj_id=department_id,
+                   extra_info=department_info)
+
         return department
 
     def delete(department_id):
         session = Session()
         department = session.query(Department).filter_by(
             id=department_id).first()
+        department_info = {
+            'name': department.name
+        }
         session.delete(department)
         session.commit()
         session.close()
+
+        # Log the action
+        log_action('delete', 'department', obj_id=department_id,
+                   extra_info=department_info)
+
         return department

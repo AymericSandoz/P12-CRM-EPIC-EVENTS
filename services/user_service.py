@@ -1,26 +1,32 @@
 from models import Session, User
-
-# python create_user_script.py --employee_number 12345 --name "John Doe" --email "johndoe@example.com" --department_id 1 --password "securepassword" --can_create_clients --can_modify_contracts --can_assign_events
-
-# Créer une classe User_Service avec get, create, etc...
+from sentry.log import log_action
 
 
 class User_Services():
-    def create(employee_number, name, email, department_id, password, can_create_clients=False, can_modify_contracts=False, can_assign_events=False):
+    def create(employee_number, name, email, department_id, password):
         session = Session()
         new_user = User(
             employee_number=employee_number,
             name=name,
             email=email,
-            department_id=department_id
+            department_id=department_id,
         )
         new_user.set_password(password)
         session.add(new_user)
         session.commit()
         user_id = new_user.id
-        user_name = new_user.name
+        user_info = {
+            'employee_number': new_user.employee_number,
+            'name': new_user.name,
+            'email': new_user.email,
+            'department_id': new_user.department_id,
+        }
         session.close()
-        return user_id, user_name
+
+        # Log the action
+        log_action('create', 'user', obj_id=user_id, extra_info=user_info)
+
+        return user_id, new_user.name
 
     def get_all():
         session = Session()
@@ -43,17 +49,33 @@ class User_Services():
         for key, value in filtered_kwargs.items():
             setattr(user, key, value)
         session.commit()
-        user_id = user.id
-        user_name = user.name
+        user_info = {
+            'employee_number': user.employee_number,
+            'name': user.name,
+            'email': user.email,
+            'department_id': user.department_id,
+        }
         session.close()
-        return user_name
+
+        # Log the action
+        log_action('update', 'user', obj_id=user_id, extra_info=user_info)
+
+        return user.name
 
     def delete(user_id):
         session = Session()
         user = session.query(User).filter_by(id=user_id).first()
+        user_info = {
+            'employee_number': user.employee_number,
+            'name': user.name,
+            'email': user.email,
+            'department_id': user.department_id
+        }
         session.delete(user)
         session.commit()
-        user_id = user.id
-        user_name = user.name
         session.close()
-        return user_name
+
+        # Log the action
+        log_action('delete', 'user', obj_id=user_id, extra_info=user_info)
+
+        return user.name
