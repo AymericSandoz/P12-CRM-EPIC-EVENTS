@@ -16,12 +16,21 @@
       "program": "${workspaceFolder}/main_2.py",
       "console": "integratedTerminal",
       "args": [
+        "log",
         "login",
         "--email",
         "luc@example.com",
         "--password",
         "securepassword"
       ]
+    },
+    {
+      "name": "Python: Logout",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main_2.py",
+      "console": "integratedTerminal",
+      "args": ["log", "logout"]
     },
     // Commandes pour User
     {
@@ -50,11 +59,11 @@
         "user",
         "create_user",
         "--employee_number",
-        "121",
+        "11",
         "--name",
         "frank Doe",
         "--email",
-        "luc2@example.com",
+        "1@example.com",
         "--password",
         "password123",
         "--department_id",

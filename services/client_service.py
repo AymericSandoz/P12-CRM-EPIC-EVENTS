@@ -1,4 +1,5 @@
 from models import Client, Session
+from sentry.log import log_action
 
 
 class Client_services():
@@ -14,8 +15,18 @@ class Client_services():
         )
         session.add(client)
         session.commit()
+        client_info = {
+            'full_name': client.full_name,
+            'email': client.email,
+            'phone': client.phone,
+            'company_name': client.company_name,
+            'last_update': client.last_update,
+            'contact_person': client.contact_person
+        }
         client_id = client.id
         session.close()
+        log_action('create', 'client', obj_id=client_id,
+                   extra_info=client_info)
         return client_id, full_name
 
     def get_all():
@@ -43,7 +54,10 @@ class Client_services():
 
         client_name = client.full_name
         session.commit()
+
         session.close()
+        log_action('update', 'client', obj_id=client_id,
+                   extra_info=filtered_kwargs)
         return client_name
 
     def delete(client_id):
@@ -52,5 +66,16 @@ class Client_services():
         client_name = client.full_name
         session.delete(client)
         session.commit()
+        client_info = {
+            'full_name': client.full_name,
+            'email': client.email,
+            'phone': client.phone,
+            'company_name': client.company_name,
+            'last_update': client.last_update,
+            'contact_person': client.contact_person
+        }
         session.close()
+
+        log_action('delete', 'client', obj_id=client_id,
+                   extra_info=client_info)
         return client_name

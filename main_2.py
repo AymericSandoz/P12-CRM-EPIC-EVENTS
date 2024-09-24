@@ -1,10 +1,14 @@
 import click
-from services.auth import login, AuthenticationError
 from commands.user import user_cli  # Import pour les commandes utilisateurs
 from commands.department import department_cli
 from commands.event import event_cli  # Import pour les commandes événements
 from commands.client import client_cli  # Import pour les commandes clients
 from commands.contract import contract_cli  # Import pour les commandes contrats
+from commands.log import log_cli
+import sentry_sdk
+from sentry_sdk.integrations.logging import LoggingIntegration
+import logging
+from config import SENTRY_DSN
 
 
 @click.group()
@@ -13,32 +17,7 @@ def cli():
     pass
 
 
-@cli.command()
-@click.argument('email')
-@click.argument('password')
-def login_cli(email, password):
-    """Login to the system."""
-    try:
-        token = login(email, password)
-        click.echo(f"Login successful. JWT token: {token}")
-    except AuthenticationError:
-        click.echo("Invalid credentials.")
-
-
-@cli.command()
-def logout_cli():
-    """Logout from the system."""
-    click.echo("Logged out.")
-
-
-@cli.command()
-@click.argument('token')
-def add_token_cli(token):
-    """Add a JWT token."""
-    click.echo(f"Token added: {token}")
-
-
-# Ajouter les sous-groupes de commandes pour les différentes entités
+cli.add_command(log_cli)
 cli.add_command(client_cli)
 cli.add_command(user_cli)
 cli.add_command(department_cli)
@@ -46,4 +25,21 @@ cli.add_command(event_cli)
 cli.add_command(contract_cli)
 
 if __name__ == '__main__':
+
+    sentry_logging = LoggingIntegration(
+        level=logging.INFO,  # Capture info and above as breadcrumbs
+        event_level=logging.ERROR  # Send errors as events
+    )
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for tracing.
+        integrations=[sentry_logging],
+        traces_sample_rate=1.0,
+        # Set profiles_sample_rate to 1.0 to profile 100%
+        # of sampled transactions.
+        # We recommend adjusting this value in production.
+        profiles_sample_rate=1.0,
+    )
+
     cli()

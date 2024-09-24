@@ -1,5 +1,5 @@
 from models import Session, User
-from utils.jwt_utils import create_jwt, decode_jwt, save_jwt, delete_jwt
+from utils.jwt_utils import create_jwt, decode_jwt, save_jwt, delete_jwt, load_jwt
 from models import Client, Contract, Event
 
 
@@ -27,6 +27,18 @@ def login(email, password):
 def logout():
     delete_jwt()
     print("Logout successful!")
+
+
+def get_current_user():
+    token = load_jwt()
+    if token:
+        payload = decode_jwt(token)
+        if payload:
+            session = Session()
+            user = session.query(User).filter_by(id=payload["user_id"]).first()
+            session.close()
+            return user
+    return None
 
 
 def check_authorization(token, action, obj_type, obj_id):
