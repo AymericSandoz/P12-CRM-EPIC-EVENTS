@@ -54,19 +54,11 @@ class Contract_services():
         for key, value in filtered_kwargs.items():
             setattr(contract, key, value)
         session.commit()
-        contract_info = {
-            'client_id': contract.client_id,
-            'total_amount': contract.total_amount,
-            'amount_due': contract.amount_due,
-            'commercial_contact_id': contract.commercial_contact_id,
-            'is_signed': contract.is_signed,
-            'updated_fields': filtered_kwargs
-        }
         session.close()
 
         # Log the action
         log_action('update', 'contract', obj_id=contract_id,
-                   extra_info=contract_info)
+                   extra_info=filtered_kwargs)
 
         return contract_id
 

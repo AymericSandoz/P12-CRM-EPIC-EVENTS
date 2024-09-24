@@ -42,15 +42,10 @@ class Department_services():
         for key, value in filtered_kwargs.items():
             setattr(department, key, value)
         session.commit()
-        department_info = {
-            'name': department.name,
-            'updated_fields': filtered_kwargs
-        }
         session.close()
 
-        # Log the action
         log_action('update', 'department', obj_id=department_id,
-                   extra_info=department_info)
+                   extra_info=filtered_kwargs)
 
         return department
 

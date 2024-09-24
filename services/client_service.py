@@ -54,18 +54,10 @@ class Client_services():
 
         client_name = client.full_name
         session.commit()
-        client_info = {
-            'full_name': client.full_name,
-            'email': client.email,
-            'phone': client.phone,
-            'company_name': client.company_name,
-            'last_update': client.last_update,
-            'contact_person': client.contact_person
-        }
 
         session.close()
         log_action('update', 'client', obj_id=client_id,
-                   extra_info=client_info)
+                   extra_info=filtered_kwargs)
         return client_name
 
     def delete(client_id):

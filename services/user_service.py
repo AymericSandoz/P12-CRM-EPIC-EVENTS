@@ -23,7 +23,6 @@ class User_Services():
         }
         session.close()
 
-        # Log the action
         log_action('create', 'user', obj_id=user_id, extra_info=user_info)
 
         return user_id, new_user.name
@@ -49,16 +48,11 @@ class User_Services():
         for key, value in filtered_kwargs.items():
             setattr(user, key, value)
         session.commit()
-        user_info = {
-            'employee_number': user.employee_number,
-            'name': user.name,
-            'email': user.email,
-            'department_id': user.department_id,
-        }
         session.close()
 
         # Log the action
-        log_action('update', 'user', obj_id=user_id, extra_info=user_info)
+        log_action('update', 'user', obj_id=user_id,
+                   extra_info=filtered_kwargs)
 
         return user.name
 

@@ -58,22 +58,11 @@ class Event_services():
         for key, value in filtered_kwargs.items():
             setattr(event, key, value)
         session.commit()
-        event_info = {
-            'event_name': event.event_name,
-            'contract_id': event.contract_id,
-            'client_id': event.client_id,
-            'event_start_date': event.event_start_date,
-            'event_end_date': event.event_end_date,
-            'support_contact': event.support_contact,
-            'location': event.location,
-            'attendees': event.attendees,
-            'notes': event.notes,
-            'updated_fields': filtered_kwargs
-        }
         session.close()
 
         # Log the action
-        log_action('update', 'event', obj_id=event_id, extra_info=event_info)
+        log_action('update', 'event', obj_id=event_id,
+                   extra_info=filtered_kwargs)
 
         return event.event_name
 
