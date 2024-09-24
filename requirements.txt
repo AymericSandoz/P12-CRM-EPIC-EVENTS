@@ -1,4 +1,6 @@
 SQLAlchemy
 bcrypt
-PyJWT
+jwt
+sentry-sdk
+click
 pymysql

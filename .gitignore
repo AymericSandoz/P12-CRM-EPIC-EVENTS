@@ -1,3 +1,7 @@
 Note.md
-config.md
+config.py
 jwt.txt
+venv/
+/__pycache__/
+question_mentor.md
+*.pyc
