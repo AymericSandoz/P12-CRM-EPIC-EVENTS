@@ -1,6 +1,9 @@
 from models import Session, User
 from utils.jwt_utils import create_jwt, decode_jwt, save_jwt, delete_jwt, load_jwt
+from utils.args_utils import get_obj_id
 from models import Client, Contract, Event
+from entities.entities import Commands
+import sys
 
 
 class AuthenticationError(Exception):
@@ -14,7 +17,6 @@ def login(email, password):
     if user and user.check_password(password):
         token = create_jwt(user.id)
         save_jwt(token)
-        print("Login successful!")
         print(f"Your JWT token is: {token}")
         print("Your token will expire in 30 minutes.")
         print("Carefull, this token will be stored until you logout.")
@@ -26,7 +28,6 @@ def login(email, password):
 
 def logout():
     delete_jwt()
-    print("Logout successful!")
 
 
 def get_current_user():
@@ -41,12 +42,17 @@ def get_current_user():
     return None
 
 
-def check_authorization(token, action, obj_type, obj_id):
+def check_authorization():
+    token = load_jwt()
+    if not token:
+        return False
     payload = decode_jwt(token)
 
     if not payload:
-        print("Invalid token.")
         return False
+
+    action, obj_type = Commands.COMMANDS_PERMISSIONS.get(sys.argv[2])
+    obj_id = get_obj_id()
 
     session = Session()
     user = session.query(User).filter_by(id=payload["user_id"]).first()
@@ -64,8 +70,12 @@ def check_authorization(token, action, obj_type, obj_id):
 
     # Check user management permissions
     if obj_type == 'user':
-        return user.department.name == 'gestion' and action in ['create', 'update', 'delete']
-
+        if user.department.name == 'gestion' and action in ['create', 'update', 'delete']:
+            return True
+        else:
+            print(
+                "Seul le département 'gestion' peut mettre à jour, créer et supprimer des utilisateurs.")
+            return False
     # Check client permissions
     if obj_type == 'client':
         return check_client_permissions(session, user, action, obj_id)
@@ -127,78 +137,3 @@ def check_event_permissions(session, user, action, event_id):
         return True
 
     return False
-
-
-# def check_authorization(token, action, obj_type, obj_id):
-#     """
-#     Vérifie si l'utilisateur a l'autorisation de réaliser une action donnée sur un type d'objet spécifique.
-#     :param token: Le jeton JWT de l'utilisateur
-#     :param action: L'action souhaitée (par ex: 'create', 'update', 'delete')
-#     :param obj_type: Le type de l'objet ('client', 'contract', 'event')
-#     :param obj_id: L'identifiant de l'objet pour valider les permissions spécifiques
-#     :return: True si autorisé, sinon False
-#     """
-#     payload = decode_jwt(token)
-
-#     if payload:
-#         session = Session()
-#         user = session.query(User).filter_by(id=payload["user_id"]).first()
-#         if not user:
-#             print("User not found.")
-#             return False
-
-#         print(user)
-
-#         if not user.department:
-#             print("User has no department known.")
-#             return False
-
-#         if action == 'read':
-#             return True
-
-#         elif obj_type == 'user':
-#             if action in ['create', 'update', 'delete'] and user.department.name == 'gestion':
-#                 return True
-#             return False
-
-#         # Vérification des permissions en fonction de l'objet et de l'action
-#         if obj_type == 'client':
-#             if action == 'create' and user.department.name == 'commercial':
-#                 return True
-#             elif action in ['update', 'delete'] and user.department.name == 'commercial':
-#                 # Vérifier si le commercial est bien responsable du client
-#                 client = session.query(Client).filter_by(id=obj_id).first()
-#                 if client and client.commercial_id == user.id:
-#                     return True
-#                 else:
-#                     print("Not authorized to modify this client.")
-#                     return False
-#             return False
-
-#         elif obj_type == 'contract':
-#             if action in ['create', 'update', 'delete'] and user.department.name == 'gestion':
-#                 return True
-#             elif action == 'update' and user.department.name == 'commercial':
-#                 contract = session.query(Contract).filter_by(id=obj_id).first()
-#                 if contract and contract.commercial_id == user.id:
-#                     return True
-#                 else:
-#                     print("Not authorized to modify this contract.")
-#                     return False
-
-#         elif obj_type == 'event':
-#             if action == 'update' and user.department.name == 'support':
-#                 event = session.query(Event).filter_by(id=obj_id).first()
-#                 if event and event.support_id == user.id:
-#                     return True
-#                 else:
-#                     print("Not authorized to modify this event.")
-#                     return False
-#             elif action == 'assign' and user.department.name == 'gestion':
-#                 return True
-#             elif action == 'create' and user.department.name == 'commercial':
-#                 return True
-
-#         print("You don't have the required permissions.")
-#         return False
-#     return False
