@@ -9,10 +9,15 @@ import sentry_sdk
 from sentry_sdk.integrations.logging import LoggingIntegration
 import logging
 from config import SENTRY_DSN
+from services.auth import check_authorization
 
 
 @click.group()
 def cli():
+    ctx = click.get_current_context()
+    if 'log' != ctx.invoked_subcommand:
+        if not check_authorization():
+            exit()
     """Epic Events CRM CLI."""
     pass
 
@@ -41,5 +46,14 @@ if __name__ == '__main__':
         # We recommend adjusting this value in production.
         profiles_sample_rate=1.0,
     )
+
+    # token = load_jwt()
+    # if not token:
+    #     print("No JWT token found. Please log in.")
+    #     exit()
+
+    # action, type = Commands.COMMANDS_PERMISSIONS.get()
+    # if not check_authorization(token, action, type):
+    #     exit()
 
     cli()

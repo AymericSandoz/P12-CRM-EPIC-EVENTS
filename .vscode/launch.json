@@ -19,9 +19,24 @@
         "log",
         "login",
         "--email",
-        "luc@example.com",
+        "Gestion@example.com",
         "--password",
-        "securepassword"
+        "password123"
+      ]
+    },
+    {
+      "name": "Python: Login commercial",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "log",
+        "login",
+        "--email",
+        "Doe@example.com",
+        "--password",
+        "password123"
       ]
     },
     {
@@ -59,15 +74,15 @@
         "user",
         "create_user",
         "--employee_number",
-        "11",
+        "5",
         "--name",
-        "frank Doe",
+        "spport  mael",
         "--email",
-        "Doe@example.com",
+        "support@example.com",
         "--password",
         "password123",
         "--department_id",
-        "1"
+        "3"
       ]
     },
     {
@@ -121,9 +136,9 @@
         "client",
         "create_client",
         "--full_name",
-        "s s",
+        "sarah martinez",
         "--email",
-        "sssss@example.com",
+        "martinez@example.com",
         "--phone",
         "0123456789",
         "--company_name",
@@ -131,7 +146,7 @@
         "--last_update",
         "2024-09-01",
         "--contact_person",
-        "sa sa"
+        "franck martinez"
       ]
     },
     {
@@ -191,7 +206,7 @@
         "--amount_due",
         "1000",
         "--commercial_contact_id",
-        "6"
+        "2"
       ]
     },
     {
