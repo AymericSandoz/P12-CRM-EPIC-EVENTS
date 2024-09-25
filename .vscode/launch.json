@@ -25,6 +25,21 @@
       ]
     },
     {
+      "name": "Python: Login commercial",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "log",
+        "login",
+        "--email",
+        "Doe@example.com",
+        "--password",
+        "password123"
+      ]
+    },
+    {
       "name": "Python: Logout",
       "type": "python",
       "request": "launch",
@@ -191,7 +206,7 @@
         "--amount_due",
         "1000",
         "--commercial_contact_id",
-        "6"
+        "2"
       ]
     },
     {

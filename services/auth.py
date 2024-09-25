@@ -1,6 +1,6 @@
 from models import Session, User
 from utils.jwt_utils import create_jwt, decode_jwt, save_jwt, delete_jwt, load_jwt
-from utils.args_utils import get_obj_id
+from utils.args_utils import get_obj_id, get_contract_id
 from models import Client, Contract, Event
 from entities.entities import Commands
 import sys
@@ -133,7 +133,14 @@ def check_event_permissions(session, user, action, event_id):
         return True
 
     if action == 'create' and user.department.name == 'commercial':
-        # manque vérification que le client a bien signé un contrat avec le commercial
-        return True
+        # vérification que le client a bien signé un contrat avec le commercial
+        contract_id = get_contract_id()
+        contract = session.query(Contract).filter_by(id=contract_id).first()
+        if contract and contract.commercial_contact_id == user.id:
+            return True
+        else:
+            # Si le commercial n'a pas de contrat avec le client
+            print("Not authorized to create an event for this client.")
+            return False
 
     return False

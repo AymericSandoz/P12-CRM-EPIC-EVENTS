@@ -11,3 +11,15 @@ def get_obj_id():
         except IndexError:
             print("No value provided for --obj_id")
     return None
+
+
+def get_contract_id():
+    """ get the contract id from the command line arguments """
+    if '--contract_id' in sys.argv:
+        contract_id_index = sys.argv.index('--contract_id') + 1
+        try:
+            contract_id = sys.argv[contract_id_index]
+            return contract_id
+        except IndexError:
+            print("No value provided for --contract_id")
+    return None
