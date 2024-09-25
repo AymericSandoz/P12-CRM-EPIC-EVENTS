@@ -47,13 +47,4 @@ if __name__ == '__main__':
         profiles_sample_rate=1.0,
     )
 
-    # token = load_jwt()
-    # if not token:
-    #     print("No JWT token found. Please log in.")
-    #     exit()
-
-    # action, type = Commands.COMMANDS_PERMISSIONS.get()
-    # if not check_authorization(token, action, type):
-    #     exit()
-
     cli()
