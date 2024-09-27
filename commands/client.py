@@ -57,7 +57,8 @@ def get_client(obj_id):
 def create_client(full_name, email, phone, company_name, last_update, contact_person):
     """Create a new client."""
     client_id, client_name = Client_services.create(
-        full_name=full_name, email=email, phone=phone, company_name=company_name, last_update=last_update, contact_person=contact_person)
+        full_name=full_name, email=email, phone=phone, company_name=company_name, last_update=last_update,
+        contact_person=contact_person)
     click.echo(
         f"Client {client_name} created successfully with ID {client_id}")
 
@@ -68,7 +69,8 @@ def create_client(full_name, email, phone, company_name, last_update, contact_pe
 def update_client(obj_id, full_name, email, phone, company_name, last_update, contact_person):
     """Update an existing client."""
     client_name = Client_services.update(
-        client_id=obj_id, full_name=full_name, email=email, phone=phone, company_name=company_name, last_update=last_update, contact_person=contact_person)
+        client_id=obj_id, full_name=full_name, email=email, phone=phone, company_name=company_name,
+        last_update=last_update, contact_person=contact_person)
     click.echo(f"Client {client_name} updated successfully.")
 
 

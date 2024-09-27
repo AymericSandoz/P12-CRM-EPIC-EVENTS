@@ -4,3 +4,5 @@ jwt
 sentry-sdk
 click
 pymysql
+flake8
+flake8-html

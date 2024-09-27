@@ -55,7 +55,9 @@ def get_contract(obj_id):
 def create_contract(client_id, total_amount, amount_due, commercial_contact_id, is_signed):
     """Create a new contract."""
     contract_id, client_id = Contract_services.create(
-        client_id=client_id, total_amount=total_amount, amount_due=amount_due, commercial_contact_id=commercial_contact_id, is_signed=is_signed)
+        client_id=client_id, total_amount=total_amount, amount_due=amount_due,
+        commercial_contact_id=commercial_contact_id,
+        is_signed=is_signed)
     click.echo(f"Contract created successfully with ID {
                contract_id} for Client ID {client_id}")
 

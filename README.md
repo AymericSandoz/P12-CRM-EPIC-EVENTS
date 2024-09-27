@@ -86,6 +86,12 @@ Après authentification, le token JWT est utilisé pour autoriser l'accès à di
 
 If faut donc configurer dans le fichier 'config.py' les variables JWT_ALGORITHM et SECRET_KEY.
 
+```python
+# config.py
+JWT_ALGORITHM = 'Votre_algorithme_secret'
+SECRET_KEY = 'Votre_clé_secrète'
+```
+
 ## Gestion des permissions
 
 Les permissions dans cette application sont basées sur les rôles des utilisateurs. Lorsqu'un utilisateur tente de créer, modifier ou supprimer des objets (clients, contrats, etc.), son rôle est vérifié pour s'assurer qu'il dispose des droits nécessaires.

@@ -66,7 +66,8 @@ def create_user(employee_number, name, email, department_id, password):
 def update_user(obj_id, employee_number, name, email, department_id, password):
     """Update an existing user."""
     user_name = User_Services.update(
-        user_id=obj_id, employee_number=employee_number, name=name, email=email, department_id=department_id, password=password)
+        user_id=obj_id, employee_number=employee_number, name=name, email=email,
+        department_id=department_id, password=password)
     click.echo(f"User {user_name} updated successfully.")
 
 

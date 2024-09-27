@@ -59,10 +59,12 @@ def get_event(obj_id):
 
 @click.command(name='create_event')
 @event_options(required=True)
-def create_event(event_name, event_start_date, event_end_date, client_id, contract_id, support_contact, location, attendees, notes):
+def create_event(event_name, event_start_date, event_end_date, client_id, contract_id,
+                 support_contact, location, attendees, notes):
     """Create a new event."""
     event_id, event_name = Event_services.create(
-        event_name=event_name, event_start_date=event_start_date, event_end_date=event_end_date, client_id=client_id, contract_id=contract_id, support_contact=support_contact, location=location, attendees=attendees, notes=notes)
+        event_name=event_name, event_start_date=event_start_date, event_end_date=event_end_date, client_id=client_id,
+        contract_id=contract_id, support_contact=support_contact, location=location, attendees=attendees, notes=notes)
     click.echo(
         f"Event {event_name} created successfully with ID {event_id}")
 
@@ -70,10 +72,13 @@ def create_event(event_name, event_start_date, event_end_date, client_id, contra
 @click.command(name='update_event')
 @click.option('--obj_id', type=int, required=True, help='ID of the event')
 @event_options(required=False)
-def update_event(obj_id, event_name, event_start_date, event_end_date, client_id, contract_id, support_contact, location, attendees, notes):
+def update_event(obj_id, event_name, event_start_date, event_end_date, client_id, contract_id,
+                 support_contact, location, attendees, notes):
     """Update an existing event."""
     event_name = Event_services.update(
-        obj_id, event_name=event_name, event_start_date=event_start_date, event_end_date=event_end_date, client_id=client_id, contract_id=contract_id, support_contact=support_contact, location=location, attendees=attendees, notes=notes)
+        obj_id, event_name=event_name, event_start_date=event_start_date, event_end_date=event_end_date,
+        client_id=client_id, contract_id=contract_id, support_contact=support_contact,
+        location=location, attendees=attendees, notes=notes)
     click.echo(f"Event {event_name} updated successfully.")
 
 
