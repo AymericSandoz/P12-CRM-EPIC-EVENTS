@@ -1,4 +1,4 @@
-from services.department_service import Department_services
+from services import department_service
 import click
 
 
@@ -19,7 +19,7 @@ def department_options(required=False):
 @department_cli.command(name='get_departments')
 def get_departments():
     """Get all departments."""
-    departments = Department_services.get_all()
+    departments = department_service.get_all()
     if not departments:
         click.echo("No departments found.")
     else:
@@ -33,7 +33,7 @@ def get_departments():
 @click.option('--obj_id', type=int, required=True, help='ID of the department')
 def get_department(obj_id):
     """Get a department by ID."""
-    department = Department_services.get(obj_id)
+    department = department_service.get(obj_id)
     if not department:
         click.echo("Department not found.")
     else:
@@ -44,7 +44,7 @@ def get_department(obj_id):
 @department_options(required=True)
 def create_department(name):
     """Create a new department."""
-    department_id, department_name = Department_services.create(name=name)
+    department_id, department_name = department_service.create(name=name)
     click.echo(f"Department {department_name} created successfully with ID {
                department_id}")
 
@@ -54,7 +54,7 @@ def create_department(name):
 @department_options(required=False)
 def update_department(obj_id, name):
     """Update an existing department."""
-    department_name = Department_services.update(obj_id, name=name)
+    department_name = department_service.update(obj_id, name=name)
     click.echo(f"Department {department_name} updated successfully.")
 
 
@@ -62,7 +62,7 @@ def update_department(obj_id, name):
 @click.option('--obj_id', type=int, required=True, help='ID of the department')
 def delete_department(obj_id):
     """Delete a department by ID."""
-    department_name = Department_services.delete(obj_id)
+    department_name = department_service.delete(obj_id)
     click.echo(f"Department {department_name} deleted successfully.")
 
 

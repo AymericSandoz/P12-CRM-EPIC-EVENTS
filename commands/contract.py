@@ -1,4 +1,4 @@
-from services.contract_service import Contract_services
+from services import contract_service
 import click
 
 
@@ -28,7 +28,7 @@ def contract_options(required=True):
 @contract_cli.command(name='get_contracts')
 def get_contracts():
     """Get all contracts."""
-    contracts = Contract_services.get_all()
+    contracts = contract_service.get_all()
     if not contracts:
         click.echo("No contracts found.")
     else:
@@ -42,7 +42,7 @@ def get_contracts():
 @click.option('--obj_id', type=int, required=True, help='ID of the contract')
 def get_contract(obj_id):
     """Get a contract by ID."""
-    contract = Contract_services.get(obj_id)
+    contract = contract_service.get(obj_id)
     if not contract:
         click.echo("Contract not found.")
     else:
@@ -54,7 +54,7 @@ def get_contract(obj_id):
 @contract_options(required=True)
 def create_contract(client_id, total_amount, amount_due, commercial_contact_id, is_signed):
     """Create a new contract."""
-    contract_id, client_id = Contract_services.create(
+    contract_id, client_id = contract_service.create(
         client_id=client_id, total_amount=total_amount, amount_due=amount_due,
         commercial_contact_id=commercial_contact_id,
         is_signed=is_signed)
@@ -67,7 +67,7 @@ def create_contract(client_id, total_amount, amount_due, commercial_contact_id, 
 @contract_options(required=False)
 def update_contract(obj_id, client_id, total_amount, amount_due, commercial_contact_id, is_signed):
     """Update an existing contract."""
-    contract_id = Contract_services.update(
+    contract_id = contract_service.update(
         contract_id=obj_id,
         client_id=client_id,
         total_amount=total_amount,
@@ -82,7 +82,7 @@ def update_contract(obj_id, client_id, total_amount, amount_due, commercial_cont
 @click.option('--obj_id', type=int, required=True, help='ID of the contract')
 def delete_contract(obj_id):
     """Delete a contract by ID."""
-    contract_id = Contract_services.delete(obj_id)
+    contract_id = contract_service.delete(obj_id)
     click.echo(f"Contract deleted successfully with ID {contract_id}")
 
 

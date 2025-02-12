@@ -1,4 +1,4 @@
-from services.event_service import Event_services
+from services import event_service
 import click
 
 
@@ -35,7 +35,7 @@ def event_options(required=True):
 @click.command(name='get_events')
 def get_events():
     """Get all events."""
-    events = Event_services.get_all()
+    events = event_service.get_all()
     if not events:
         click.echo("No events found.")
     else:
@@ -50,7 +50,7 @@ def get_events():
 def get_incomplete_events(fields):
     """Get events with incomplete data."""
     fields = list(fields) if fields else None
-    events = Event_services.get_incomplete_events(fields)
+    events = event_service.get_incomplete_events(fields)
     if not events:
         click.echo("No incomplete events found.")
     else:
@@ -63,7 +63,7 @@ def get_incomplete_events(fields):
 @click.option('--obj_id', type=int, required=True, help='ID of the event')
 def get_event(obj_id):
     """Get an event by ID."""
-    event = Event_services.get(obj_id)
+    event = event_service.get(obj_id)
     if not event:
         click.echo("Event not found.")
     else:
@@ -76,7 +76,7 @@ def get_event(obj_id):
 def create_event(event_name, event_start_date, event_end_date, client_id, contract_id,
                  support_contact, location, attendees, notes):
     """Create a new event."""
-    event_id, event_name = Event_services.create(
+    event_id, event_name = event_service.create(
         event_name=event_name, event_start_date=event_start_date, event_end_date=event_end_date, client_id=client_id,
         contract_id=contract_id, support_contact=support_contact, location=location, attendees=attendees, notes=notes)
     click.echo(
@@ -89,7 +89,7 @@ def create_event(event_name, event_start_date, event_end_date, client_id, contra
 def update_event(obj_id, event_name, event_start_date, event_end_date, client_id, contract_id,
                  support_contact, location, attendees, notes):
     """Update an existing event."""
-    event_name = Event_services.update(
+    event_name = event_service.update(
         obj_id, event_name=event_name, event_start_date=event_start_date, event_end_date=event_end_date,
         client_id=client_id, contract_id=contract_id, support_contact=support_contact,
         location=location, attendees=attendees, notes=notes)
@@ -100,7 +100,7 @@ def update_event(obj_id, event_name, event_start_date, event_end_date, client_id
 @click.option('--obj_id', type=int, required=True, help='ID of the event')
 def delete_event(obj_id):
     """Delete an event by ID."""
-    event_name = Event_services.delete(obj_id)
+    event_name = event_service.delete(obj_id)
     click.echo(f"Event {event_name} deleted successfully.")
 
 

@@ -52,6 +52,7 @@ def check_authorization():
 
     if not payload:
         return False
+    # sys.argv is used here to get the command path instead of click context because click context is not yet available
     action, obj_type = Commands.COMMANDS_PERMISSIONS.get(sys.argv[2])
     obj_id = get_obj_id()
 

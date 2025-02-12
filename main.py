@@ -14,6 +14,10 @@ from services.auth import check_authorization
 
 @click.group()
 def cli():
+    """
+    Epic Events CRM CLI.
+    If the command is not 'log', check if the user is authorized.
+    """
     ctx = click.get_current_context()
     if 'log' != ctx.invoked_subcommand:
         if not check_authorization():

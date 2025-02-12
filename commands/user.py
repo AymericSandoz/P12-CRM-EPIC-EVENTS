@@ -1,4 +1,4 @@
-from services.user_service import User_Services
+from services import user_service
 import click
 
 
@@ -28,7 +28,7 @@ def user_options(required=True):
 @click.command(name='get_users')
 def get_users():
     """Get all users."""
-    users = User_Services.get_all()
+    users = user_service.get_all()
     if not users:
         click.echo("No users found.")
     else:
@@ -42,7 +42,7 @@ def get_users():
 @click.option('--obj_id', type=int, required=True, help='ID of the user')
 def get_user(obj_id):
     """Get a user by ID."""
-    user = User_Services.get(obj_id)
+    user = user_service.get(obj_id)
     if not user:
         click.echo("User not found.")
     else:
@@ -54,7 +54,7 @@ def get_user(obj_id):
 @user_options(required=True)
 def create_user(employee_number, name, email, department_id, password):
     """Create a new user."""
-    user_id, user_name = User_Services.create(
+    user_id, user_name = user_service.create(
         employee_number=employee_number, name=name, email=email, department_id=department_id, password=password)
     click.echo(
         f"User {user_name} created successfully with ID {user_id}")
@@ -65,7 +65,7 @@ def create_user(employee_number, name, email, department_id, password):
 @user_options(required=False)
 def update_user(obj_id, employee_number, name, email, department_id, password):
     """Update an existing user."""
-    user_name = User_Services.update(
+    user_name = user_service.update(
         user_id=obj_id, employee_number=employee_number, name=name, email=email,
         department_id=department_id, password=password)
     click.echo(f"User {user_name} updated successfully.")
@@ -75,7 +75,7 @@ def update_user(obj_id, employee_number, name, email, department_id, password):
 @click.option('--obj_id', type=int, required=True, help='ID of the user')
 def delete_user(obj_id):
     """Delete a user."""
-    user_name = User_Services.delete(obj_id)
+    user_name = user_service.delete(obj_id)
     click.echo(f"User {user_name} deleted successfully.")
 
 
