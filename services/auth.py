@@ -43,6 +43,8 @@ def get_current_user():
 
 
 def check_authorization():
+    """
+    Check if the user has the required permissions to perform the action."""
     token = load_jwt()
     if not token:
         return False
@@ -50,7 +52,6 @@ def check_authorization():
 
     if not payload:
         return False
-
     action, obj_type = Commands.COMMANDS_PERMISSIONS.get(sys.argv[2])
     obj_id = get_obj_id()
 
@@ -143,4 +144,5 @@ def check_event_permissions(session, user, action, event_id):
             print("Not authorized to create an event for this client.")
             return False
 
+    print("Not authorized to perform this action.")
     return False

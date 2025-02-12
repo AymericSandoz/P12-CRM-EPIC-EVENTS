@@ -243,6 +243,28 @@
       "args": ["event", "get_events"]
     },
     {
+      "name": "Python: Get Incomplete Events",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": ["event", "get_incomplete_events"]
+    },
+    {
+      "name": "Python: Get Incomplete Events no location and no support contact",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "event",
+        "get_incomplete_events",
+        "--fields",
+        "location",
+        "support_contact"
+      ]
+    },
+    {
       "name": "Python: Get Event",
       "type": "python",
       "request": "launch",
@@ -269,6 +291,50 @@
         "2024-09-15",
         "--event_end_date",
         "2024-09-16",
+        "--support_contact",
+        "Jane Smith",
+        "--location",
+        "New York",
+        "--attendees",
+        "150"
+      ]
+    },
+    {
+      "name": "Python: Create Incomplete Event",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "event",
+        "create_event",
+        "--event_name",
+        "SSS dauheeeeee",
+        "--contract_id",
+        "2",
+        "--client_id",
+        "1",
+        "--event_start_date",
+        "2024-09-15",
+        "--attendees",
+        "150"
+      ]
+    },
+    {
+      "name": "Python: Create Incomplete Event 2",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "event",
+        "create_event",
+        "--event_name",
+        "ZZZ dauheeeeee",
+        "--contract_id",
+        "2",
+        "--client_id",
+        "1",
         "--support_contact",
         "Jane Smith",
         "--location",

@@ -12,19 +12,19 @@ def event_options(required=True):
     def decorator(func):
         func = click.option('--event_name', required=required,
                             help='Name of the event')(func)
-        func = click.option('--event_start_date', required=required,
+        func = click.option('--event_start_date', required=False,
                             help='Start date of the event')(func)
-        func = click.option('--event_end_date', required=required,
+        func = click.option('--event_end_date', required=False,
                             help='End date of the event')(func)
         func = click.option('--client_id', type=int, required=required,
                             help='Client ID for the event')(func)
         func = click.option('--contract_id', type=int, required=required,
                             help='Contract ID for the event')(func)
-        func = click.option('--support_contact', required=required,
+        func = click.option('--support_contact', required=False,
                             help='Support contact for the event')(func)
-        func = click.option('--location', required=required,
+        func = click.option('--location', required=False,
                             help='Location of the event')(func)
-        func = click.option('--attendees', type=int, required=required,
+        func = click.option('--attendees', type=int, required=False,
                             help='Number of attendees')(func)
         func = click.option('--notes', required=False,
                             help='Notes for the event')(func)
@@ -43,6 +43,20 @@ def get_events():
         for event in events:
             click.echo(f"Event ID: {event.id}, Name: {
                        event.event_name}, Date: {event.event_start_date}")
+
+
+@click.command(name='get_incomplete_events')
+@click.option('--fields', multiple=True, help='Fields to check for incompleteness')
+def get_incomplete_events(fields):
+    """Get events with incomplete data."""
+    fields = list(fields) if fields else None
+    events = Event_services.get_incomplete_events(fields)
+    if not events:
+        click.echo("No incomplete events found.")
+    else:
+        click.echo(f"There are {len(events)} incomplete events")
+        for event in events:
+            click.echo(f"Event ID: {event.id}, Name: {event.event_name}, Date: {event.event_start_date}")
 
 
 @click.command(name='get_event')
@@ -91,6 +105,7 @@ def delete_event(obj_id):
 
 
 event_cli.add_command(get_events)
+event_cli.add_command(get_incomplete_events)
 event_cli.add_command(get_event)
 event_cli.add_command(create_event)
 event_cli.add_command(update_event)

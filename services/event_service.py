@@ -3,8 +3,9 @@ from sentry.log import log_action
 
 
 class Event_services():
-    def create(event_name, event_start_date, event_end_date, client_id, contract_id, support_contact, location,
-               attendees, notes=None):
+    def create(event_name=None, event_start_date=None, event_end_date=None, client_id=None, contract_id=None,
+               support_contact=None, location=None,
+               attendees=None, notes=None):
         session = Session()
         event = Event(
             event_name=event_name,
@@ -41,6 +42,25 @@ class Event_services():
     def get_all():
         session = Session()
         events = session.query(Event).all()
+        session.close()
+        return events
+
+    def get_incomplete_events(fields=None):
+        """Get events with missing fields."""
+        session = Session()
+        query = session.query(Event)
+
+        if fields is None:
+            fields = [
+                'contract_id', 'client_id', 'event_name', 'event_start_date',
+                'event_end_date', 'support_contact', 'location', 'attendees', 'notes'
+            ]
+
+        filters = []
+        for field in fields:
+            filters.append(getattr(Event, field) == None)
+
+        events = query.filter(*filters).all()
         session.close()
         return events
 

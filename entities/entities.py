@@ -23,6 +23,7 @@ class Commands:
         'delete_department': ('delete', 'department'),
         'create_event': ('create', 'event'),
         'get_events': ('read', 'event'),
+        'get_incomplete_events': ('read', 'event'),
         'get_event': ('read', 'event'),
         'update_event': ('update', 'event'),
         'delete_event': ('delete', 'event'),
