@@ -7,7 +7,7 @@ import os
 def create_jwt(user_id):
     payload = {
         "user_id": user_id,
-        "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=200)
+        "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=1)
     }
     token = jwt.encode(payload, SECRET_KEY, algorithm=JWT_ALGORITHM)
     return token
@@ -18,7 +18,7 @@ def decode_jwt(token):
         payload = jwt.decode(token, SECRET_KEY, algorithms=[JWT_ALGORITHM])
         return payload
     except jwt.ExpiredSignatureError:
-        print("Token has expired.")
+        print("Token has expired. Please login again.")
         return None
     except jwt.InvalidTokenError:
         print("Invalid token.")

@@ -51,7 +51,7 @@ def update(contract_id, **kwargs):
     session = Session()
     contract = session.query(Contract).filter_by(id=contract_id).first()
     if not contract:
-        return None
+        raise ValueError("Contract not found")
     filtered_kwargs = {key: value for key,
                        value in kwargs.items() if value is not None}
     for key, value in filtered_kwargs.items():
@@ -70,7 +70,7 @@ def delete(contract_id):
     session = Session()
     contract = session.query(Contract).filter_by(id=contract_id).first()
     if not contract:
-        return None
+        raise ValueError("Contract not found")
     contract_info = {
         'client_id': contract.client_id,
         'total_amount': contract.total_amount,

@@ -1,8 +1,13 @@
 from models import Client, Session
 from sentry.log import log_action
+from utils.validation_utils import validate_email, validate_phone_number
 
 
 def create(full_name, email, phone, company_name, last_update, contact_person):
+    if not validate_email(email):
+        raise ValueError("Invalid email address")
+    if not validate_phone_number(phone):
+        raise ValueError("Invalid phone number")
     session = Session()
     client = Client(
         full_name=full_name,
@@ -47,7 +52,7 @@ def update(client_id, **kwargs):
     session = Session()
     client = session.query(Client).filter_by(id=client_id).first()
     if not client:
-        return None
+        raise ValueError("Client not found")
     # Filtrer les champs non nuls
     filtered_kwargs = {key: value for key,
                        value in kwargs.items() if value is not None}
@@ -68,7 +73,7 @@ def delete(client_id):
     session = Session()
     client = session.query(Client).filter_by(id=client_id).first()
     if not client:
-        return None
+        raise ValueError("Client not found")
     client_name = client.full_name
     session.delete(client)
     session.commit()

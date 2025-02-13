@@ -45,7 +45,7 @@ def update(user_id, **kwargs):
     session = Session()
     user = session.query(User).filter_by(id=user_id).first()
     if not user:
-        return None
+        raise ValueError("User not found")
 
     filtered_kwargs = {key: value for key,
                        value in kwargs.items() if value is not None}
@@ -65,7 +65,7 @@ def delete(user_id):
     session = Session()
     user = session.query(User).filter_by(id=user_id).first()
     if not user:
-        return None
+        raise ValueError("User not found")
     user_info = {
         'employee_number': user.employee_number,
         'name': user.name,

@@ -40,7 +40,7 @@ def update(department_id, **kwargs):
     department = session.query(Department).filter_by(
         id=department_id).first()
     if not department:
-        return None
+        raise ValueError("Department not found")
 
     filtered_kwargs = {key: value for key,
                        value in kwargs.items() if value is not None}
@@ -60,7 +60,7 @@ def delete(department_id):
     department = session.query(Department).filter_by(
         id=department_id).first()
     if not department:
-        return None
+        raise ValueError("Department not found")
     department_info = {
         'name': department.name
     }

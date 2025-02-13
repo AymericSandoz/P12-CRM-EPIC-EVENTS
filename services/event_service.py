@@ -77,7 +77,7 @@ def update(event_id, **kwargs):
     session = Session()
     event = session.query(Event).filter_by(id=event_id).first()
     if not event:
-        return None
+        raise ValueError("Event not found")
     filtered_kwargs = {key: value for key,
                        value in kwargs.items() if value is not None}
     for key, value in filtered_kwargs.items():
@@ -96,7 +96,7 @@ def delete(event_id):
     session = Session()
     event = session.query(Event).filter_by(id=event_id).first()
     if not event:
-        return None
+        raise ValueError("Event not found")
     event_info = {
         'event_name': event.event_name,
         'contract_id': event.contract_id,

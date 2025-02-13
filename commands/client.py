@@ -1,5 +1,5 @@
 import click
-from services.client_service import Client_services
+from services import client_service
 
 
 @click.group(name='client')
@@ -30,7 +30,7 @@ def client_options(required=True):
 @click.command(name='get_clients')
 def get_clients():
     """Get all clients."""
-    clients = Client_services.get_all()
+    clients = client_service.get_all()
     if not clients:
         click.echo("No clients found.")
     else:
@@ -44,7 +44,7 @@ def get_clients():
 @click.option('--obj_id', type=int, required=True, help='ID of the client')
 def get_client(obj_id):
     """Get a client by ID."""
-    client = Client_services.get(obj_id)
+    client = client_service.get(obj_id)
     if not client:
         click.echo("Client not found.")
     else:
@@ -56,7 +56,7 @@ def get_client(obj_id):
 @client_options(required=True)
 def create_client(full_name, email, phone, company_name, last_update, contact_person):
     """Create a new client."""
-    client_id, client_name = Client_services.create(
+    client_id, client_name = client_service.create(
         full_name=full_name, email=email, phone=phone, company_name=company_name, last_update=last_update,
         contact_person=contact_person)
     click.echo(
@@ -68,7 +68,7 @@ def create_client(full_name, email, phone, company_name, last_update, contact_pe
 @client_options(required=False)
 def update_client(obj_id, full_name, email, phone, company_name, last_update, contact_person):
     """Update an existing client."""
-    client_name = Client_services.update(
+    client_name = client_service.update(
         client_id=obj_id, full_name=full_name, email=email, phone=phone, company_name=company_name,
         last_update=last_update, contact_person=contact_person)
     click.echo(f"Client {client_name} updated successfully.")
@@ -78,7 +78,7 @@ def update_client(obj_id, full_name, email, phone, company_name, last_update, co
 @click.option('--obj_id', type=int, required=True, help='ID of the client')
 def delete_client(obj_id):
     """Delete a client by ID."""
-    client_name = Client_services.delete(obj_id)
+    client_name = client_service.delete(obj_id)
     click.echo(f"Client {client_name} deleted successfully.")
 
 
