@@ -140,7 +140,7 @@
         "--email",
         "martinez@example.com",
         "--phone",
-        "0123456789",
+        "0123456789565165D",
         "--company_name",
         "Asscme Inc.",
         "--last_update",
@@ -161,7 +161,9 @@
         "--obj_id",
         "1",
         "--full_name",
-        "test test Updated Corp"
+        "test test Updated Corp",
+        "--email",
+        "testwrongemail&&&"
       ]
     },
     {

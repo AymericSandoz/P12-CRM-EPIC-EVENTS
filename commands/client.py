@@ -1,5 +1,6 @@
 import click
 from services import client_service
+import sentry_sdk
 
 
 @click.group(name='client')
@@ -30,37 +31,52 @@ def client_options(required=True):
 @click.command(name='get_clients')
 def get_clients():
     """Get all clients."""
-    clients = client_service.get_all()
-    if not clients:
-        click.echo("No clients found.")
-    else:
-        click.echo(f"There are {len(clients)} clients")
-        for client in clients:
-            click.echo(f"Client ID: {client.id}, Name: {
-                       client.full_name}, Email: {client.email}")
+    try:
+        clients = client_service.get_all()
+        if not clients:
+            click.echo("No clients found.")
+        else:
+            click.echo(f"There are {len(clients)} clients")
+            for client in clients:
+                click.echo(f"Client ID: {client.id}, Name: {
+                    client.full_name}, Email: {client.email}")
+
+    except Exception as e:
+        click.echo("An unexpected error occurred")
+        sentry_sdk.capture_exception(e)
 
 
 @click.command(name='get_client')
 @click.option('--obj_id', type=int, required=True, help='ID of the client')
 def get_client(obj_id):
     """Get a client by ID."""
-    client = client_service.get(obj_id)
-    if not client:
-        click.echo("Client not found.")
-    else:
-        click.echo(f"Client ID: {client.id}, Name: {
-                   client.full_name}, Email: {client.email}")
+    try:
+        client = client_service.get(obj_id)
+        if not client:
+            click.echo("Client not found.")
+        else:
+            click.echo(f"Client ID: {client.id}, Name: {
+                client.full_name}, Email: {client.email}")
+    except Exception:
+        click.echo("An unexpected error occurred")
+        sentry_sdk.capture_exception()
 
 
 @click.command(name='create_client')
 @client_options(required=True)
 def create_client(full_name, email, phone, company_name, last_update, contact_person):
     """Create a new client."""
-    client_id, client_name = client_service.create(
-        full_name=full_name, email=email, phone=phone, company_name=company_name, last_update=last_update,
-        contact_person=contact_person)
-    click.echo(
-        f"Client {client_name} created successfully with ID {client_id}")
+    try:
+        client_id, client_name = client_service.create(
+            full_name=full_name, email=email, phone=phone, company_name=company_name, last_update=last_update,
+            contact_person=contact_person)
+        click.echo(
+            f"Client {client_name} created successfully with ID {client_id}")
+    except ValueError as e:
+        click.echo(f"Erreur lors de la création du client: {e}")
+    except Exception:
+        click.echo("An unexpected error occurred")
+        sentry_sdk.capture_exception()
 
 
 @click.command(name='update_client')
@@ -68,18 +84,30 @@ def create_client(full_name, email, phone, company_name, last_update, contact_pe
 @client_options(required=False)
 def update_client(obj_id, full_name, email, phone, company_name, last_update, contact_person):
     """Update an existing client."""
-    client_name = client_service.update(
-        client_id=obj_id, full_name=full_name, email=email, phone=phone, company_name=company_name,
-        last_update=last_update, contact_person=contact_person)
-    click.echo(f"Client {client_name} updated successfully.")
+    try:
+        client_name = client_service.update(
+            client_id=obj_id, full_name=full_name, email=email, phone=phone, company_name=company_name,
+            last_update=last_update, contact_person=contact_person)
+        click.echo(f"Client {client_name} updated successfully.")
+    except ValueError as e:
+        click.echo(f"Erreur lors de la mise à jour du client: {e}")
+    except Exception:
+        click.echo("An unexpected error occurred")
+        sentry_sdk.capture_exception()
 
 
 @click.command(name='delete_client')
 @click.option('--obj_id', type=int, required=True, help='ID of the client')
 def delete_client(obj_id):
     """Delete a client by ID."""
-    client_name = client_service.delete(obj_id)
-    click.echo(f"Client {client_name} deleted successfully.")
+    try:
+        client_name = client_service.delete(obj_id)
+        click.echo(f"Client {client_name} deleted successfully.")
+    except ValueError as e:
+        click.echo(f"Erreur lors de la suppression du client: {e}")
+    except Exception:
+        click.echo("An unexpected error occurred")
+        sentry_sdk.capture_exception()
 
 
 # Ajout des commandes au groupe

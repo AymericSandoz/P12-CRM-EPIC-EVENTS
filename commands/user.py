@@ -1,5 +1,6 @@
 from services import user_service
 import click
+import sentry_sdk
 
 
 @click.group(name='user')
@@ -28,36 +29,51 @@ def user_options(required=True):
 @click.command(name='get_users')
 def get_users():
     """Get all users."""
-    users = user_service.get_all()
-    if not users:
-        click.echo("No users found.")
-    else:
-        click.echo(f"There are {len(users)} users")
-        for user in users:
-            click.echo(f"User ID: {user.id}, Name: {
-                       user.name}, Email: {user.email}")
+    try:
+        users = user_service.get_all()
+        if not users:
+            click.echo("No users found.")
+        else:
+            click.echo(f"There are {len(users)} users")
+            for user in users:
+                click.echo(f"User ID: {user.id}, Name: {
+                    user.name}, Email: {user.email}")
+    except Exception:
+        click.echo("An unexpected error occurred")
+        sentry_sdk.capture_exception()
 
 
 @click.command(name='get_user')
 @click.option('--obj_id', type=int, required=True, help='ID of the user')
 def get_user(obj_id):
     """Get a user by ID."""
-    user = user_service.get(obj_id)
-    if not user:
-        click.echo("User not found.")
-    else:
-        click.echo(f"User ID: {user.id}, Name: {
-                   user.name}, Email: {user.email}")
+    try:
+        user = user_service.get(obj_id)
+        if not user:
+            click.echo("User not found.")
+        else:
+            click.echo(f"User ID: {user.id}, Name: {
+                user.name}, Email: {user.email}")
+    except Exception:
+        click.echo("An unexpected error occurred")
+        sentry_sdk.capture_exception()
 
 
 @click.command(name='create_user')
 @user_options(required=True)
 def create_user(employee_number, name, email, department_id, password):
     """Create a new user."""
-    user_id, user_name = user_service.create(
-        employee_number=employee_number, name=name, email=email, department_id=department_id, password=password)
-    click.echo(
-        f"User {user_name} created successfully with ID {user_id}")
+    try:
+        user_id, user_name = user_service.create(
+            employee_number=employee_number, name=name, email=email, department_id=department_id, password=password)
+        click.echo(
+            f"User {user_name} created successfully with ID {user_id}")
+    except ValueError as e:
+        click.echo(f"Error creating user: {e}")
+        sentry_sdk.capture_exception()
+    except Exception as e:
+        click.echo("An unexpected error occurred")
+        sentry_sdk.capture_exception(e)
 
 
 @click.command(name='update_user')
@@ -65,18 +81,30 @@ def create_user(employee_number, name, email, department_id, password):
 @user_options(required=False)
 def update_user(obj_id, employee_number, name, email, department_id, password):
     """Update an existing user."""
-    user_name = user_service.update(
-        user_id=obj_id, employee_number=employee_number, name=name, email=email,
-        department_id=department_id, password=password)
-    click.echo(f"User {user_name} updated successfully.")
+    try:
+        user_name = user_service.update(
+            user_id=obj_id, employee_number=employee_number, name=name, email=email,
+            department_id=department_id, password=password)
+        click.echo(f"User {user_name} updated successfully.")
+    except ValueError as e:
+        click.echo(f"Error updating user: {e}")
+    except Exception:
+        click.echo("An unexpected error occurred")
+        sentry_sdk.capture_exception()
 
 
 @click.command(name='delete_user')
 @click.option('--obj_id', type=int, required=True, help='ID of the user')
 def delete_user(obj_id):
     """Delete a user."""
-    user_name = user_service.delete(obj_id)
-    click.echo(f"User {user_name} deleted successfully.")
+    try:
+        user_name = user_service.delete(obj_id)
+        click.echo(f"User {user_name} deleted successfully.")
+    except ValueError as e:
+        click.echo(f"Error deleting user: {e}")
+    except Exception:
+        click.echo("An unexpected error occurred")
+        sentry_sdk.capture_exception()
 
 
 user_cli.add_command(get_users)

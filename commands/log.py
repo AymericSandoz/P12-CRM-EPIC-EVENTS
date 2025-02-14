@@ -1,5 +1,6 @@
 from services.auth import login as auth_login, logout as auth_logout
 import click
+import sentry_sdk
 
 
 @click.group(name='log')
@@ -22,15 +23,23 @@ def log_options(required=True):
 @log_options(required=True)
 def login_command(email, password):
     """Login to the system."""
-    auth_login(email, password)
-    click.echo("Logged in successfully.")
+    try:
+        auth_login(email, password)
+        click.echo("Logged in successfully.")
+    except Exception:
+        click.echo("An error occurred while logging in.")
+        sentry_sdk.capture_exception()
 
 
 @log_cli.command(name='logout')
 def logout_command():
     """Logout from the system."""
-    auth_logout()
-    click.echo("Logged out successfully.")
+    try:
+        auth_logout()
+        click.echo("Logged out successfully.")
+    except Exception:
+        click.echo("An error occurred while logging out.")
+        sentry_sdk.capture_exception()
 
 
 log_cli.add_command(login_command)

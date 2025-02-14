@@ -1,5 +1,6 @@
 from services import department_service
 import click
+import sentry_sdk
 
 
 @click.group(name='department')
@@ -19,34 +20,48 @@ def department_options(required=False):
 @department_cli.command(name='get_departments')
 def get_departments():
     """Get all departments."""
-    departments = department_service.get_all()
-    if not departments:
-        click.echo("No departments found.")
-    else:
-        click.echo(f"There are {len(departments)} departments")
-        for department in departments:
-            click.echo(f"Department ID: {
-                       department.id}, Name: {department.name}")
+    try:
+        departments = department_service.get_all()
+        if not departments:
+            click.echo("No departments found.")
+        else:
+            click.echo(f"There are {len(departments)} departments")
+            for department in departments:
+                click.echo(f"Department ID: {
+                    department.id}, Name: {department.name}")
+    except Exception:
+        click.echo("An error occurred while fetching departments.")
+        sentry_sdk.capture_exception()
 
 
 @department_cli.command(name='get_department')
 @click.option('--obj_id', type=int, required=True, help='ID of the department')
 def get_department(obj_id):
     """Get a department by ID."""
-    department = department_service.get(obj_id)
-    if not department:
-        click.echo("Department not found.")
-    else:
-        click.echo(f"Department ID: {department.id}, Name: {department.name}")
+    try:
+        department = department_service.get(obj_id)
+        if not department:
+            click.echo("Department not found.")
+        else:
+            click.echo(f"Department ID: {department.id}, Name: {department.name}")
+    except Exception:
+        click.echo("An error occurred while fetching the department.")
+        sentry_sdk.capture_exception()
 
 
 @department_cli.command(name='create_department')
 @department_options(required=True)
 def create_department(name):
     """Create a new department."""
-    department_id, department_name = department_service.create(name=name)
-    click.echo(f"Department {department_name} created successfully with ID {
-               department_id}")
+    try:
+        department_id, department_name = department_service.create(name=name)
+        click.echo(f"Department {department_name} created successfully with ID {
+            department_id}")
+    except ValueError as e:
+        click.echo(f"An error occurred while creating the department: {e}")
+    except Exception:
+        click.echo("An error occurred while creating the department.")
+        sentry_sdk.capture_exception()
 
 
 @department_cli.command(name='update_department')
@@ -54,16 +69,28 @@ def create_department(name):
 @department_options(required=False)
 def update_department(obj_id, name):
     """Update an existing department."""
-    department_name = department_service.update(obj_id, name=name)
-    click.echo(f"Department {department_name} updated successfully.")
+    try:
+        department_name = department_service.update(obj_id, name=name)
+        click.echo(f"Department {department_name} updated successfully.")
+    except ValueError as e:
+        click.echo(f"An error occurred while updating the department: {e}")
+    except Exception:
+        click.echo("An error occurred while updating the department.")
+        sentry_sdk.capture_exception()
 
 
 @department_cli.command(name='delete_department')
 @click.option('--obj_id', type=int, required=True, help='ID of the department')
 def delete_department(obj_id):
     """Delete a department by ID."""
-    department_name = department_service.delete(obj_id)
-    click.echo(f"Department {department_name} deleted successfully.")
+    try:
+        department_name = department_service.delete(obj_id)
+        click.echo(f"Department {department_name} deleted successfully.")
+    except ValueError as e:
+        click.echo(f"An error occurred while deleting the department: {e}")
+    except Exception:
+        click.echo("An error occurred while deleting the department.")
+        sentry_sdk.capture_exception()
 
 
 department_cli.add_command(get_departments)

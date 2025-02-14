@@ -1,13 +1,13 @@
 import jwt
 import datetime
-from config import SECRET_KEY, JWT_ALGORITHM
+from config import SECRET_KEY, JWT_ALGORITHM, JWT_EXPIRATION_TIME
 import os
 
 
 def create_jwt(user_id):
     payload = {
         "user_id": user_id,
-        "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=1)
+        "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=JWT_EXPIRATION_TIME)
     }
     token = jwt.encode(payload, SECRET_KEY, algorithm=JWT_ALGORITHM)
     return token

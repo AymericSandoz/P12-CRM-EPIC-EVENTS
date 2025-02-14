@@ -4,6 +4,7 @@ from utils.args_utils import get_obj_id, get_contract_id
 from models import Client, Contract, Event
 from entities.entities import Commands
 import sys
+from config import JWT_EXPIRATION_TIME
 
 
 class AuthenticationError(Exception):
@@ -18,7 +19,7 @@ def login(email, password):
         token = create_jwt(user.id)
         save_jwt(token)
         print(f"Your JWT token is: {token}")
-        print("Your token will expire in 30 minutes.")
+        print(f"Your token will expire in {JWT_EXPIRATION_TIME} minutes.")
         print("Carefull, this token will be stored until you logout.")
         return token
     else:
@@ -100,11 +101,15 @@ def check_client_permissions(session, user, action, client_id):
 
     if action in ['update', 'delete'] and user.department.name == 'commercial':
         client = session.query(Client).filter_by(id=client_id).first()
-        if client and client.commercial_id == user.id:
+        # vérification que le client appartient bien au commercial
+        # récupération du contrat du client
+        contract = session.query(Contract).filter_by(client_id=client_id).first()
+        if client and contract and contract.commercial_contact_id == user.id:
             return True
         else:
             print("Not authorized to modify this client.")
             return False
+    print("Not authorized to perform this action.")
     return False
 
 
@@ -119,6 +124,7 @@ def check_contract_permissions(session, user, action, contract_id):
         else:
             print("Not authorized to modify this contract.")
             return False
+    print("Not authorized to perform this action.")
     return False
 
 

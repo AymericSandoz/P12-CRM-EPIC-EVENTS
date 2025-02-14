@@ -57,6 +57,10 @@ def update(client_id, **kwargs):
     filtered_kwargs = {key: value for key,
                        value in kwargs.items() if value is not None}
 
+    if 'email' in filtered_kwargs and not validate_email(filtered_kwargs['email']):
+        raise ValueError("Invalid email address")
+    if 'phone' in filtered_kwargs and not validate_phone_number(filtered_kwargs['phone']):
+        raise ValueError("Invalid phone number")
     for key, value in filtered_kwargs.items():
         setattr(client, key, value)
 

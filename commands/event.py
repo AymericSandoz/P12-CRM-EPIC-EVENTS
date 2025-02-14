@@ -1,5 +1,6 @@
 from services import event_service
 import click
+import sentry_sdk
 
 
 @click.group(name='event')
@@ -35,40 +36,52 @@ def event_options(required=True):
 @click.command(name='get_events')
 def get_events():
     """Get all events."""
-    events = event_service.get_all()
-    if not events:
-        click.echo("No events found.")
-    else:
-        click.echo(f"There are {len(events)} events")
-        for event in events:
-            click.echo(f"Event ID: {event.id}, Name: {
-                       event.event_name}, Date: {event.event_start_date}")
+    try:
+        events = event_service.get_all()
+        if not events:
+            click.echo("No events found.")
+        else:
+            click.echo(f"There are {len(events)} events")
+            for event in events:
+                click.echo(f"Event ID: {event.id}, Name: {
+                    event.event_name}, Date: {event.event_start_date}")
+    except Exception:
+        click.echo("An error occurred while fetching events.")
+        sentry_sdk.capture_exception()
 
 
 @click.command(name='get_incomplete_events')
 @click.option('--fields', multiple=True, help='Fields to check for incompleteness')
 def get_incomplete_events(fields):
     """Get events with incomplete data."""
-    fields = list(fields) if fields else None
-    events = event_service.get_incomplete_events(fields)
-    if not events:
-        click.echo("No incomplete events found.")
-    else:
-        click.echo(f"There are {len(events)} incomplete events")
-        for event in events:
-            click.echo(f"Event ID: {event.id}, Name: {event.event_name}, Date: {event.event_start_date}")
+    try:
+        fields = list(fields) if fields else None
+        events = event_service.get_incomplete_events(fields)
+        if not events:
+            click.echo("No incomplete events found.")
+        else:
+            click.echo(f"There are {len(events)} incomplete events")
+            for event in events:
+                click.echo(f"Event ID: {event.id}, Name: {event.event_name}, Date: {event.event_start_date}")
+    except Exception:
+        click.echo("An error occurred while fetching incomplete events.")
+        sentry_sdk.capture_exception()
 
 
 @click.command(name='get_event')
 @click.option('--obj_id', type=int, required=True, help='ID of the event')
 def get_event(obj_id):
     """Get an event by ID."""
-    event = event_service.get(obj_id)
-    if not event:
-        click.echo("Event not found.")
-    else:
-        click.echo(f"Event ID: {event.id}, Name: {
-                   event.event_name}, Date: {event.event_start_date}")
+    try:
+        event = event_service.get(obj_id)
+        if not event:
+            click.echo("Event not found.")
+        else:
+            click.echo(f"Event ID: {event.id}, Name: {
+                event.event_name}, Date: {event.event_start_date}")
+    except Exception:
+        click.echo("An error occurred while fetching the event.")
+        sentry_sdk.capture_exception()
 
 
 @click.command(name='create_event')
@@ -76,11 +89,15 @@ def get_event(obj_id):
 def create_event(event_name, event_start_date, event_end_date, client_id, contract_id,
                  support_contact, location, attendees, notes):
     """Create a new event."""
-    event_id, event_name = event_service.create(
-        event_name=event_name, event_start_date=event_start_date, event_end_date=event_end_date, client_id=client_id,
-        contract_id=contract_id, support_contact=support_contact, location=location, attendees=attendees, notes=notes)
-    click.echo(
-        f"Event {event_name} created successfully with ID {event_id}")
+    try:
+        event_id, event_name = event_service.create(
+            event_name=event_name, event_start_date=event_start_date, event_end_date=event_end_date, client_id=client_id,
+            contract_id=contract_id, support_contact=support_contact, location=location, attendees=attendees, notes=notes)
+        click.echo(
+            f"Event {event_name} created successfully with ID {event_id}")
+    except Exception:
+        click.echo("An error occurred while creating the event.")
+        sentry_sdk.capture_exception()
 
 
 @click.command(name='update_event')
@@ -89,19 +106,31 @@ def create_event(event_name, event_start_date, event_end_date, client_id, contra
 def update_event(obj_id, event_name, event_start_date, event_end_date, client_id, contract_id,
                  support_contact, location, attendees, notes):
     """Update an existing event."""
-    event_name = event_service.update(
-        obj_id, event_name=event_name, event_start_date=event_start_date, event_end_date=event_end_date,
-        client_id=client_id, contract_id=contract_id, support_contact=support_contact,
-        location=location, attendees=attendees, notes=notes)
-    click.echo(f"Event {event_name} updated successfully.")
+    try:
+        event_name = event_service.update(
+            obj_id, event_name=event_name, event_start_date=event_start_date, event_end_date=event_end_date,
+            client_id=client_id, contract_id=contract_id, support_contact=support_contact,
+            location=location, attendees=attendees, notes=notes)
+        click.echo(f"Event {event_name} updated successfully.")
+    except ValueError as e:
+        click.echo(f"An error occurred while updating the event: {e}")
+    except Exception:
+        click.echo("An error occurred while updating the event.")
+        sentry_sdk.capture_exception()
 
 
 @click.command(name='delete_event')
 @click.option('--obj_id', type=int, required=True, help='ID of the event')
 def delete_event(obj_id):
     """Delete an event by ID."""
-    event_name = event_service.delete(obj_id)
-    click.echo(f"Event {event_name} deleted successfully.")
+    try:
+        event_name = event_service.delete(obj_id)
+        click.echo(f"Event {event_name} deleted successfully.")
+    except ValueError as e:
+        click.echo(f"An error occurred while deleting the event: {e}")
+    except Exception:
+        click.echo("An error occurred while deleting the event.")
+        sentry_sdk.capture_exception()
 
 
 event_cli.add_command(get_events)

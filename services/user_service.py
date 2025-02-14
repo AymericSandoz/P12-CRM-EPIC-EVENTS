@@ -1,9 +1,12 @@
 from models import Session, User
 from sentry.log import log_action
+from utils.validation_utils import validate_email
 
 
 def create(employee_number, name, email, department_id, password):
     session = Session()
+    if not validate_email(email):
+        raise ValueError("Invalid email address")
     new_user = User(
         employee_number=employee_number,
         name=name,
@@ -49,6 +52,8 @@ def update(user_id, **kwargs):
 
     filtered_kwargs = {key: value for key,
                        value in kwargs.items() if value is not None}
+    if 'email' in filtered_kwargs and not validate_email(filtered_kwargs['email']):
+        raise ValueError("Invalid email address")
     for key, value in filtered_kwargs.items():
         setattr(user, key, value)
     session.commit()
