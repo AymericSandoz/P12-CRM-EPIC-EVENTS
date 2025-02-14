@@ -6,9 +6,8 @@ from .base import Base
 class Event(Base):
     __tablename__ = 'events'
 
-    # contract_id, client_id, event_name, event_start_date, event_end_date, support_contact, location, attendees, notes
     id = Column(Integer, primary_key=True)
-    contract_id = Column(Integer, ForeignKey('contracts.id'), nullable=False)
+    contract_id = Column(Integer, ForeignKey('contracts.id'), nullable=False, unique=True)
     client_id = Column(Integer, ForeignKey('clients.id'), nullable=False)
     event_name = Column(String(100), nullable=False)
     event_start_date = Column(Date, nullable=True)

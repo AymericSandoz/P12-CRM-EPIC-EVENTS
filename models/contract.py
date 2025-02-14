@@ -16,4 +16,4 @@ class Contract(Base):
     is_signed = Column(Boolean, default=False)
 
     client = relationship('Client', back_populates='contracts')
-    events = relationship('Event', back_populates='contract')
+    events = relationship('Event', back_populates='contract', uselist=False)  # one to one relationship
