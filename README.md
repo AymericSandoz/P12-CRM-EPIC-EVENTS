@@ -78,6 +78,14 @@ Epic Events CRM est une application de ligne de commande (CLI) conçue pour gér
    Il est possible, si vous préférez, de créer la base de donnée avec un script SQL:
    creation_db.sql
 
+   Ensuite, il est nécéssaire de créer les départements ainsi qu'un collaborateur du département gestion.
+
+   Pour cela exécécutez la commande:
+
+   ```bash
+   python init_db.py
+   ```
+
 7. Un shéma de la base de donnée est disponible dans db_shema.png
 
 ## Authentification avec JWT
@@ -186,16 +194,27 @@ Obtenir tous les contrats :
 python main.py contract get_contracts
 ```
 
-Obtenir un contrat spécifique :
-bash```
-python main.py contract get_contract --obj_id <id_contrat>
+Pour récupérer tous les contrats non signés et/ou ceux qui ont un montant dû non nul, utilise la commande suivante :
 
-````
+```bash
+python main.py contract filter_contracts --unsigned --amount_due_non_null
+```
+
+Détails des options(Vous pouvez mettre une seule des deux) :
+--unsigned : Filtre les contrats qui ne sont pas signés.
+--amount_due_non_null : Filtre les contrats qui ont encore un montant dû (supérieur à 0).
+
+Obtenir un contrat spécifique :
+
+```bash
+python main.py contract get_contract --obj_id <id_contrat>
+```
 
 Créer un nouveau contrat :
+
 ```bash
 python main.py contract create_contract --client_id <id_client> --total_amount <montant_total> --amount_due <montant_dû> --commercial_contact_id <id_contact_commercial>
-````
+```
 
 Mettre à jour un contrat :
 
@@ -216,6 +235,19 @@ Obtenir tous les événements :
 python main.py event get_events
 ```
 
+Obtenir les événements incomplets
+Par exemple, Cette commande permet de récupérer les événements dont certaines informations sont incomplètes.
+
+```bash
+python main.py event get_incomplete_events --fields support_contact
+```
+
+On peut aussi spécifier plusieurs champs pour vérifier différentes informations manquantes :
+
+```bash
+python main.py event get_incomplete_events --fields support_contact --fields event_location
+```
+
 Obtenir un événement spécifique :
 
 ```bash
@@ -225,7 +257,7 @@ python main.py event get_event --obj_id <id_événement>
 Créer un nouvel événement :
 
 ```bash
-python main.py event create_event --event_name <nom_événement> --contract_id <id_contrat> --client_id <id_client> --event_start_date <date_début> --event_end_date <date_fin> --support_contact <contact_support> --location <emplacement> --attendees <nombre_participants>
+python main.py event create_event --event_name <nom_événement> --contract_id <id_contrat> --client_id <id_client> --event_start_date <date_début> --event_end_date <date_fin> --location <emplacement> --attendees <nombre_participants>
 ```
 
 Mettre à jour un événement :

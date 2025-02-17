@@ -65,8 +65,6 @@ def get_incomplete_events(fields):
         click.echo("An error occurred while fetching incomplete events.")
         sentry_sdk.capture_exception()
 
-# get own events
-
 
 @click.command(name='filter_own_events')
 def filter_own_events():
@@ -108,7 +106,8 @@ def create_event(event_name, event_start_date, event_end_date, client_id, contra
     """Create a new event."""
     try:
         event_id, event_name = event_service.create(
-            event_name=event_name, event_start_date=event_start_date, event_end_date=event_end_date, client_id=client_id,
+            event_name=event_name, event_start_date=event_start_date, event_end_date=event_end_date,
+            client_id=client_id,
             contract_id=contract_id, location=location, attendees=attendees, notes=notes)
         click.echo(
             f"Event {event_name} created successfully with ID {event_id}")

@@ -1,6 +1,8 @@
-# Script qui permet d'initialiser la base de données avec les départements et un utilisateur (l'admin par exemple) pour le département 'gestion'.
+# Script qui permet d'initialiser la base de données avec les départements
+# et un utilisateur (l'admin par exemple) pour le département 'gestion'.
 # Cet utilisateur est nécessaire pour se connecter à l'application.
-# Il est créé avec le mot de passe 'mot_de_passe_admin'. Le mot de passe est haché avant d'être enregistré dans la base de données.
+# Il est créé avec le mot de passe 'mot_de_passe_admin'.
+# Le mot de passe est haché avant d'être enregistré dans la base de données.
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Base, Department, User
