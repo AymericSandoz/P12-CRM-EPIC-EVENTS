@@ -41,9 +41,9 @@ def get_clients():
                 click.echo(f"Client ID: {client.id}, Name: {
                     client.full_name}, Email: {client.email}")
 
-    except Exception as e:
+    except Exception:
         click.echo("An unexpected error occurred")
-        sentry_sdk.capture_exception(e)
+        sentry_sdk.capture_exception()
 
 
 @click.command(name='get_client')

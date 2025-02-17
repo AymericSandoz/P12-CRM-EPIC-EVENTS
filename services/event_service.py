@@ -1,5 +1,6 @@
-from models import Event, Session
+from models import Event, Session, User
 from sentry.log import log_action
+from services.auth import get_current_user
 
 
 def create(event_name=None, event_start_date=None, event_end_date=None, client_id=None, contract_id=None,
@@ -66,6 +67,14 @@ def get_incomplete_events(fields=None):
     return events
 
 
+def filter_own_events():
+    session = Session()
+    user = get_current_user()
+    events = session.query(Event).filter_by(support_contact=user.name).all()
+    session.close()
+    return events
+
+
 def get(event_id):
     session = Session()
     event = session.query(Event).filter_by(id=event_id).first()
@@ -80,8 +89,11 @@ def update(event_id, **kwargs):
         raise ValueError("Event not found")
     filtered_kwargs = {key: value for key,
                        value in kwargs.items() if value is not None}
+
     for key, value in filtered_kwargs.items():
         setattr(event, key, value)
+
+    event_name = event.event_name
     session.commit()
     session.close()
 
@@ -89,7 +101,29 @@ def update(event_id, **kwargs):
     log_action('update', 'event', obj_id=event_id,
                extra_info=filtered_kwargs)
 
-    return event.event_name
+    return event_name
+
+
+def assign_support_contact(event_id, support_contact):
+    session = Session()
+    event = session.query(Event).filter_by(id=event_id).first()
+    if not event:
+        raise ValueError("Event not found")
+        # check if the support contact exists and his department is support
+    support_contact_user = session.query(User).filter_by(name=support_contact).first()
+    if not support_contact_user or support_contact_user.department.name != 'support':
+        raise ValueError("Support contact does not exist or is not in the support department")
+
+    event.support_contact = support_contact
+    event_name = event.event_name
+    session.commit()
+    session.close()
+
+    # Log the action
+    log_action('update', 'event', obj_id=event_id,
+               extra_info={'support_contact': support_contact})
+
+    return event_name
 
 
 def delete(event_id):
@@ -108,6 +142,8 @@ def delete(event_id):
         'attendees': event.attendees,
         'notes': event.notes
     }
+
+    event_name = event.event_name
     session.delete(event)
     session.commit()
     session.close()
@@ -115,4 +151,4 @@ def delete(event_id):
     # Log the action
     log_action('delete', 'event', obj_id=event_id, extra_info=event_info)
 
-    return event.event_name
+    return event_name

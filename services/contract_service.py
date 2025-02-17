@@ -1,5 +1,6 @@
 from models import Contract, Session
 from sentry.log import log_action
+from sqlalchemy import false
 
 
 def create(client_id, total_amount, amount_due, commercial_contact_id, is_signed=False):
@@ -45,6 +46,18 @@ def get(contract_id):
     contract = session.query(Contract).filter_by(id=contract_id).first()
     session.close()
     return contract
+
+
+def filter_contracts(unsigned, amount_due_non_null):
+    session = Session()
+    query = session.query(Contract)
+    if amount_due_non_null:
+        query = query.filter(Contract.amount_due > 0)
+    if unsigned:
+        query = query.filter(Contract.is_signed.is_(false()))
+    contracts = query.all()
+    session.close()
+    return contracts
 
 
 def update(contract_id, **kwargs):

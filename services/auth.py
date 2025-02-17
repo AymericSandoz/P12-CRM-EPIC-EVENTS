@@ -124,20 +124,26 @@ def check_contract_permissions(session, user, action, contract_id):
         else:
             print("Not authorized to modify this contract.")
             return False
+
+    if action == 'filter_contracts' and user.department.name == 'commercial':
+        return True
     print("Not authorized to perform this action.")
     return False
 
 
 def check_event_permissions(session, user, action, event_id):
-    if action == 'update' and user.department.name == 'support':
+    if action in ['update', 'delete'] and user.department.name == 'support':
         event = session.query(Event).filter_by(id=event_id).first()
-        if event and event.support_id == user.id:
+        if event and event.support_contact == user.name:
             return True
+        elif not event:
+            print("Event not found with this id.")
+            return False
         else:
-            print("Not authorized to modify this event.")
+            print("Not authorized to modify this event. You are not the support contact.")
             return False
 
-    if action == 'assign' and user.department.name == 'gestion':
+    if action == 'assign_support_contact' and user.department.name == 'gestion':
         return True
 
     if action == 'create' and user.department.name == 'commercial':
@@ -148,8 +154,14 @@ def check_event_permissions(session, user, action, event_id):
             return True
         else:
             # Si le commercial n'a pas de contrat avec le client
-            print("Not authorized to create an event for this client.")
+            print("Not authorized to create an event for this client. No contract found.")
             return False
+
+    if action == 'filter_events' and user.department.name == 'gestion':
+        return True
+
+    if action == "filter_own_events" and user.department.name == 'support':
+        return True
 
     print("Not authorized to perform this action.")
     return False

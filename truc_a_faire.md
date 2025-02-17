@@ -7,3 +7,5 @@
 2. Architexture de l'appli
 
 3. Test
+
+J"tais en train de fix assign support contact...

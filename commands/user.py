@@ -71,9 +71,9 @@ def create_user(employee_number, name, email, department_id, password):
     except ValueError as e:
         click.echo(f"Error creating user: {e}")
         sentry_sdk.capture_exception()
-    except Exception as e:
+    except Exception:
         click.echo("An unexpected error occurred")
-        sentry_sdk.capture_exception(e)
+        sentry_sdk.capture_exception()
 
 
 @click.command(name='update_user')

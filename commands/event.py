@@ -21,8 +21,6 @@ def event_options(required=True):
                             help='Client ID for the event')(func)
         func = click.option('--contract_id', type=int, required=required,
                             help='Contract ID for the event')(func)
-        func = click.option('--support_contact', required=False,
-                            help='Support contact for the event')(func)
         func = click.option('--location', required=False,
                             help='Location of the event')(func)
         func = click.option('--attendees', type=int, required=False,
@@ -67,6 +65,25 @@ def get_incomplete_events(fields):
         click.echo("An error occurred while fetching incomplete events.")
         sentry_sdk.capture_exception()
 
+# get own events
+
+
+@click.command(name='filter_own_events')
+def filter_own_events():
+    """ Get all user events(only for support department)"""
+    try:
+        events = event_service.filter_own_events()
+        if not events:
+            click.echo("No events found.")
+        else:
+            click.echo(f"There are {len(events)} events")
+            for event in events:
+                click.echo(f"Event ID: {event.id}, Name: {
+                    event.event_name}, Date: {event.event_start_date}")
+    except Exception:
+        click.echo("An error occurred while fetching events.")
+        sentry_sdk.capture_exception()
+
 
 @click.command(name='get_event')
 @click.option('--obj_id', type=int, required=True, help='ID of the event')
@@ -87,14 +104,16 @@ def get_event(obj_id):
 @click.command(name='create_event')
 @event_options(required=True)
 def create_event(event_name, event_start_date, event_end_date, client_id, contract_id,
-                 support_contact, location, attendees, notes):
+                 location, attendees, notes):
     """Create a new event."""
     try:
         event_id, event_name = event_service.create(
             event_name=event_name, event_start_date=event_start_date, event_end_date=event_end_date, client_id=client_id,
-            contract_id=contract_id, support_contact=support_contact, location=location, attendees=attendees, notes=notes)
+            contract_id=contract_id, location=location, attendees=attendees, notes=notes)
         click.echo(
             f"Event {event_name} created successfully with ID {event_id}")
+    except ValueError as e:
+        click.echo(f"An error occurred while creating the event: {e}")
     except Exception:
         click.echo("An error occurred while creating the event.")
         sentry_sdk.capture_exception()
@@ -103,19 +122,34 @@ def create_event(event_name, event_start_date, event_end_date, client_id, contra
 @click.command(name='update_event')
 @click.option('--obj_id', type=int, required=True, help='ID of the event')
 @event_options(required=False)
-def update_event(obj_id, event_name, event_start_date, event_end_date, client_id, contract_id,
-                 support_contact, location, attendees, notes):
+def update_event(obj_id, event_name, event_start_date, event_end_date, client_id, contract_id, location,
+                 attendees, notes):
     """Update an existing event."""
     try:
         event_name = event_service.update(
             obj_id, event_name=event_name, event_start_date=event_start_date, event_end_date=event_end_date,
-            client_id=client_id, contract_id=contract_id, support_contact=support_contact,
+            client_id=client_id, contract_id=contract_id,
             location=location, attendees=attendees, notes=notes)
         click.echo(f"Event {event_name} updated successfully.")
     except ValueError as e:
         click.echo(f"An error occurred while updating the event: {e}")
     except Exception:
         click.echo("An error occurred while updating the event.")
+        sentry_sdk.capture_exception()
+
+
+@click.command(name='assign_support_contact')
+@click.option('--obj_id', type=int, required=True, help='ID of the event')
+@click.option('--support_contact', required=True, help='Support contact for the event')
+def assign_support_contact(obj_id, support_contact):
+    """Assign a support contact to an event."""
+    try:
+        event_name = event_service.assign_support_contact(obj_id, support_contact)
+        click.echo(f"Support contact assigned to event {event_name}.")
+    except ValueError as e:
+        click.echo(f"An error occurred while assigning the support contact: {e}")
+    except Exception:
+        click.echo("An error occurred while assigning the support contact.")
         sentry_sdk.capture_exception()
 
 
@@ -135,7 +169,9 @@ def delete_event(obj_id):
 
 event_cli.add_command(get_events)
 event_cli.add_command(get_incomplete_events)
+event_cli.add_command(filter_own_events)
 event_cli.add_command(get_event)
 event_cli.add_command(create_event)
 event_cli.add_command(update_event)
+event_cli.add_command(assign_support_contact)
 event_cli.add_command(delete_event)

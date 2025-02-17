@@ -10,7 +10,7 @@
       "args": ["test"]
     },
     {
-      "name": "Python: Login",
+      "name": "Python: Login with admin(gestion)",
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}/main.py",
@@ -19,11 +19,27 @@
         "log",
         "login",
         "--email",
-        "Gestion@example.com",
+        "admin@gmail.com",
+        "--password",
+        "mot_de_passe_admin"
+      ]
+    },
+    {
+      "name": "Python: Login(Support)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "log",
+        "login",
+        "--email",
+        "aymeric_sandoz@gmail.com",
         "--password",
         "password123"
       ]
     },
+
     {
       "name": "Python: Login commercial",
       "type": "python",
@@ -34,7 +50,7 @@
         "log",
         "login",
         "--email",
-        "Doe@example.com",
+        "john_lurl@gmail.com",
         "--password",
         "password123"
       ]
@@ -65,7 +81,7 @@
       "args": ["user", "get_user", "--obj_id", "2"]
     },
     {
-      "name": "Python: Create User",
+      "name": "Python: Create User(Support)",
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}/main.py",
@@ -74,11 +90,53 @@
         "user",
         "create_user",
         "--employee_number",
-        "8",
+        "2",
         "--name",
-        "spport22  mael",
+        "aymeric sandoz",
         "--email",
-        "support2@example.com",
+        "aymeric_sandoz@gmail.com",
+        "--password",
+        "password123",
+        "--department_id",
+        "2"
+      ]
+    },
+    {
+      "name": "Python: Create User(Commercial)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "user",
+        "create_user",
+        "--employee_number",
+        "3",
+        "--name",
+        "John Lurk",
+        "--email",
+        "john_lurl@gmail.com",
+        "--password",
+        "password123",
+        "--department_id",
+        "1"
+      ]
+    },
+    {
+      "name": "Python: Create User(Gestion)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "user",
+        "create_user",
+        "--employee_number",
+        "4",
+        "--name",
+        "Jane Smith",
+        "--email",
+        "jane_smith@gmail.com",
         "--password",
         "password123",
         "--department_id",
@@ -95,9 +153,9 @@
         "user",
         "update_user",
         "--obj_id",
-        "1",
-        "--email",
-        "test@example.com"
+        "2",
+        "--employee_number",
+        "32"
       ]
     },
     {
@@ -106,7 +164,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/main.py",
       "console": "integratedTerminal",
-      "args": ["user", "delete_user", "--obj_id", "9"]
+      "args": ["user", "delete_user", "--obj_id", "8"]
     },
 
     // Commandes pour Client
@@ -140,7 +198,7 @@
         "--email",
         "martinez@example.com",
         "--phone",
-        "0123456789565165D",
+        "+33630210646",
         "--company_name",
         "Asscme Inc.",
         "--last_update",
@@ -184,6 +242,14 @@
       "console": "integratedTerminal",
       "args": ["contract", "get_contracts"]
     },
+    {
+      "name":"Python: Filter contracts that are not signed and/or not paid",
+      "type":"python",
+      "request":"launch",
+      "program":"${workspaceFolder}/main.py",
+      "console":"integratedTerminal",
+      "args":["contract","filter_contracts","--unsigned","--amount_due_non_null"]
+    }
     {
       "name": "Python: Get Contract",
       "type": "python",
@@ -263,9 +329,19 @@
         "get_incomplete_events",
         "--fields",
         "location",
+        "--fields",
         "support_contact"
       ]
     },
+    {
+      "name": "Pythob: Get own events (only support contact can do this)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": ["event", "filter_own_events"]
+
+    }
     {
       "name": "Python: Get Event",
       "type": "python",
@@ -284,17 +360,15 @@
         "event",
         "create_event",
         "--event_name",
-        "Annual dauheeeeee",
+        "Annual event",
         "--contract_id",
-        "2",
+        "1",
         "--client_id",
         "1",
         "--event_start_date",
-        "2024-09-15",
+        "2027-09-15",
         "--event_end_date",
-        "2024-09-16",
-        "--support_contact",
-        "Jane Smith",
+        "2027-09-16",
         "--location",
         "New York",
         "--attendees",
@@ -337,8 +411,6 @@
         "2",
         "--client_id",
         "1",
-        "--support_contact",
-        "Jane Smith",
         "--location",
         "New York",
         "--attendees",
@@ -355,11 +427,27 @@
         "event",
         "update_event",
         "--obj_id",
-        "3",
+        "2",
         "--event_name",
-        "Updated Meeting"
+        "Updated event name"
       ]
     },
+    {
+      "name": "Python: Assign support contact to Event", // assign support contact
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "event",
+        "assign_support_contact",
+        "--obj_id",
+        "2",
+        "--support_contact",
+        "aymeric sandoz"
+      ]
+
+    }
     {
       "name": "Python: Delete Event",
       "type": "python",
@@ -387,13 +475,30 @@
       "args": ["department", "get_department", "--obj_id", "1"]
     },
     {
-      "name": "Python: Create Department",
+      "name": "Python: Create Department SUpport ",
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}/main.py",
       "console": "integratedTerminal",
       "args": ["department", "create_department", "--name", "support"]
     },
+    {
+      "name": "Python: Create Department Gestion",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": ["department", "create_department", "--name", "Gestion"]
+    },
+    {
+      "name": "Python: Create Department Commercial",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": ["department", "create_department", "--name", "Commercial"]
+    },
+
     {
       "name": "Python: Update Department",
       "type": "python",
@@ -416,6 +521,15 @@
       "program": "${workspaceFolder}/main.py",
       "console": "integratedTerminal",
       "args": ["department", "delete_department", "--obj_id", "1"]
+    },
+    // python file
+    {
+      "name": "Python: Run File",
+      "type": "python",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "args": ["run"]
     }
   ]
 }
