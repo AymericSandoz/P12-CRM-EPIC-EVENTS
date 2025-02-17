@@ -1,9 +1,9 @@
 import click
-from commands.user import user_cli  # Import pour les commandes utilisateurs
+from commands.user import user_cli
 from commands.department import department_cli
-from commands.event import event_cli  # Import pour les commandes événements
-from commands.client import client_cli  # Import pour les commandes clients
-from commands.contract import contract_cli  # Import pour les commandes contrats
+from commands.event import event_cli
+from commands.client import client_cli
+from commands.contract import contract_cli
 from commands.log import log_cli
 import sentry_sdk
 from sentry_sdk.integrations.logging import LoggingIntegration
