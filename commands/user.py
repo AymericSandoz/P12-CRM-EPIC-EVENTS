@@ -62,7 +62,8 @@ def get_user(obj_id):
 @click.command(name='create_user')
 @user_options(required=True)
 def create_user(employee_number, name, email, department_id, password):
-    """Create a new user."""
+    """Create a new user.
+    """
     try:
         user_id, user_name = user_service.create(
             employee_number=employee_number, name=name, email=email, department_id=department_id, password=password)
@@ -80,8 +81,14 @@ def create_user(employee_number, name, email, department_id, password):
 @click.option('--obj_id', type=int, required=True, help='ID of the user')
 @user_options(required=False)
 def update_user(obj_id, employee_number, name, email, department_id, password):
-    """Update an existing user."""
+    """Update an existing user.
+    Updating user name and department should be done with caution as it will have huge impact on the system.
+    """
     try:
+        if name or department_id:
+            click.echo(
+                "Updating user name and department should be done with"
+                "caution as it will have huge impact on the system.")
         user_name = user_service.update(
             user_id=obj_id, employee_number=employee_number, name=name, email=email,
             department_id=department_id, password=password)

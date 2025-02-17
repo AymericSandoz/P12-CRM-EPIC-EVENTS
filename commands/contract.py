@@ -37,7 +37,8 @@ def get_contracts():
             click.echo(f"There are {len(contracts)} contracts")
             for contract in contracts:
                 click.echo(
-                    f"Contract ID: {contract.id}, Client ID: {contract.client_id}, Total amount: {contract.total_amount}")
+                    f"Contract ID: {contract.id}, Client ID: {contract.client_id},"
+                    f"Total amount: {contract.total_amount}")
     except Exception:
         click.echo("An error occurred while fetching contracts.")
         sentry_sdk.capture_exception()
@@ -49,6 +50,11 @@ def get_contracts():
 @click.option('--unsigned', is_flag=True, help='Filter for unsigned contracts')
 @click.option('--amount_due_non_null', is_flag=True, help='Filter for contracts with non-null amount due')
 def filter_contracts(unsigned, amount_due_non_null):
+    """Filter contracts.
+    Args:
+        unsigned (bool): Filter for unsigned contracts.
+        amount_due_non_null (bool): Filter for contracts with non-null amount due.
+    """
     try:
         filtered_contracts = contract_service.filter_contracts(unsigned, amount_due_non_null)
         if not filtered_contracts:

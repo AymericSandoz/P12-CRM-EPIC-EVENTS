@@ -5,7 +5,11 @@ import sentry_sdk
 
 @click.group(name='department')
 def department_cli():
-    """Manage departments."""
+    """Manage departments.
+    Note: Departments were created during the initial setup of the system.
+    It is not possible to create, update or delete departments currently via the CLI
+    since there is no reason to do so and it will have huge impact on the system.
+    """
     pass
 
 
@@ -52,7 +56,10 @@ def get_department(obj_id):
 @department_cli.command(name='create_department')
 @department_options(required=True)
 def create_department(name):
-    """Create a new department."""
+    """Create a new department.
+    Should be done with caution as it will have huge impact on the system.
+    Currently, no users are allowed to create a department.
+    """
     try:
         department_id, department_name = department_service.create(name=name)
         click.echo(f"Department {department_name} created successfully with ID {
@@ -68,10 +75,15 @@ def create_department(name):
 @click.option('--obj_id', type=int, required=True, help='ID of the department')
 @department_options(required=False)
 def update_department(obj_id, name):
-    """Update an existing department."""
+    """Update an existing department.
+    Should be done with caution as it will have huge impact on the system.
+    Currently, no users are allowed to update a department.
+    """
     try:
         department_name = department_service.update(obj_id, name=name)
-        click.echo(f"Department {department_name} updated successfully.")
+        click.echo(f"Department {department_name} updated successfully."
+                   f"Careful, this will have huge impact on the system and should be done with caution."
+                   f"Adjustement should be made in codebase to reflect the changes.")
     except ValueError as e:
         click.echo(f"An error occurred while updating the department: {e}")
     except Exception:
@@ -82,10 +94,15 @@ def update_department(obj_id, name):
 @department_cli.command(name='delete_department')
 @click.option('--obj_id', type=int, required=True, help='ID of the department')
 def delete_department(obj_id):
-    """Delete a department by ID."""
+    """Delete a department by ID.
+    Should be done with caution as it will have huge impact on the system.
+    Currently, no users are allowed to delete a department.
+    """
     try:
         department_name = department_service.delete(obj_id)
-        click.echo(f"Department {department_name} deleted successfully.")
+        click.echo(f"Department {department_name} deleted successfully."
+                   f"Careful, this will have huge impact on the system and should be done with caution."
+                   f"Adjustement should be made in codebase to reflect the changes.")
     except ValueError as e:
         click.echo(f"An error occurred while deleting the department: {e}")
     except Exception:
