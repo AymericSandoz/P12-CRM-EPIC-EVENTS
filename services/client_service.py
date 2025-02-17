@@ -4,6 +4,15 @@ from utils.validation_utils import validate_email, validate_phone_number
 
 
 def create(full_name, email, phone, company_name, last_update, contact_person):
+    """Create a new client.
+    Args:
+        full_name (str): The full name of the client.
+        email (str): The email address of the client.
+        phone (str): The phone number of the client. Expect format: +33612345678
+        company_name (str): The name of the client's company.
+        last_update (datetime): The date of the last update.
+        contact_person (str): The name of the client's contact person.
+    """
     if not validate_email(email):
         raise ValueError("Invalid email address")
     if not validate_phone_number(phone):
@@ -35,6 +44,7 @@ def create(full_name, email, phone, company_name, last_update, contact_person):
 
 
 def get_all():
+    """Get all clients."""
     session = Session()
     clients = session.query(Client).all()
     session.close()
@@ -42,6 +52,10 @@ def get_all():
 
 
 def get(client_id):
+    """Get a client by id.
+    Args:
+        client_id (int): The id of the client to get.
+    """
     session = Session()
     client = session.query(Client).filter_by(id=client_id).first()
     session.close()
@@ -49,6 +63,11 @@ def get(client_id):
 
 
 def update(client_id, **kwargs):
+    """Update a client.
+    Args:
+        client_id (int): The id of the client to update.
+        **kwargs: The fields to update.
+    """
     session = Session()
     client = session.query(Client).filter_by(id=client_id).first()
     if not client:
@@ -74,6 +93,10 @@ def update(client_id, **kwargs):
 
 
 def delete(client_id):
+    """Delete a client.
+    Args:
+        client_id (int): The id of the client to delete.
+    """
     session = Session()
     client = session.query(Client).filter_by(id=client_id).first()
     if not client:

@@ -6,6 +6,18 @@ from services.auth import get_current_user
 def create(event_name=None, event_start_date=None, event_end_date=None, client_id=None, contract_id=None,
            support_contact=None, location=None,
            attendees=None, notes=None):
+    """Create a new event.
+    Args:
+        event_name (str): The name of the event.
+        event_start_date (datetime): The start date of the event.
+        event_end_date (datetime): The end date of the event.
+        client_id (int): The id of the client.
+        contract_id (int): The id of the contract.
+        support_contact (str): The name of the support contact.
+        location (str): The location of the event.
+        attendees (str): The attendees of the event.
+        notes (str): The notes of the event.
+    """
     session = Session()
     event = Event(
         event_name=event_name,
@@ -42,6 +54,7 @@ def create(event_name=None, event_start_date=None, event_end_date=None, client_i
 
 
 def get_all():
+    """Get all events."""
     session = Session()
     events = session.query(Event).all()
     session.close()
@@ -49,7 +62,10 @@ def get_all():
 
 
 def get_incomplete_events(fields=None):
-    """Get events with missing fields."""
+    """Get events with missing fields.
+    Args:
+        fields (list): The fields to check for missing values.
+    """
     session = Session()
     query = session.query(Event)
 
@@ -69,6 +85,7 @@ def get_incomplete_events(fields=None):
 
 
 def filter_own_events():
+    """Filter events where the user is the support contact."""
     session = Session()
     user = get_current_user()
     events = session.query(Event).filter_by(support_contact=user.name).all()
@@ -77,6 +94,10 @@ def filter_own_events():
 
 
 def get(event_id):
+    """Get an event by id.
+    Args:
+        event_id (int): The id of the event to get.
+    """
     session = Session()
     event = session.query(Event).filter_by(id=event_id).first()
     session.close()
@@ -84,6 +105,11 @@ def get(event_id):
 
 
 def update(event_id, **kwargs):
+    """Update an event.
+    Args:
+        event_id (int): The id of the event to update.
+        **kwargs: The fields to update.
+    """
     session = Session()
     event = session.query(Event).filter_by(id=event_id).first()
     if not event:
@@ -106,6 +132,11 @@ def update(event_id, **kwargs):
 
 
 def assign_support_contact(event_id, support_contact):
+    """Assign a support contact to an event.
+    Args:
+        event_id (int): The id of the event to update.
+        support_contact (str): The name of the support contact.
+    """
     session = Session()
     event = session.query(Event).filter_by(id=event_id).first()
     if not event:
@@ -128,6 +159,10 @@ def assign_support_contact(event_id, support_contact):
 
 
 def delete(event_id):
+    """Delete an event.
+    Args:
+        event_id (int): The id of the event to delete
+    """
     session = Session()
     event = session.query(Event).filter_by(id=event_id).first()
     if not event:

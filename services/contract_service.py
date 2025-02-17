@@ -4,6 +4,14 @@ from sqlalchemy import false
 
 
 def create(client_id, total_amount, amount_due, commercial_contact_id, is_signed=False):
+    """Create a new contract.
+    Args:
+        client_id (int): The id of the client.
+        total_amount (float): The total amount of the contract.
+        amount_due (float): The amount due for the contract.
+        commercial_contact_id (int): The id of the commercial contact.
+        is_signed (bool): Whether the contract is signed or not.
+    """
     session = Session()
     contract = Contract(
         client_id=client_id,
@@ -35,6 +43,7 @@ def create(client_id, total_amount, amount_due, commercial_contact_id, is_signed
 
 
 def get_all():
+    """Get all contracts."""
     session = Session()
     contracts = session.query(Contract).all()
     session.close()
@@ -42,6 +51,10 @@ def get_all():
 
 
 def get(contract_id):
+    """Get a contract by id.
+    Args:
+        contract_id (int): The id of the contract to get.
+    """
     session = Session()
     contract = session.query(Contract).filter_by(id=contract_id).first()
     session.close()
@@ -49,6 +62,11 @@ def get(contract_id):
 
 
 def filter_contracts(unsigned, amount_due_non_null):
+    """Filter contracts.
+    Args:
+        unsigned (bool): Whether the contract is signed or not.
+        amount_due_non_null (bool): Whether the amount due is not null.
+    """
     session = Session()
     query = session.query(Contract)
     if amount_due_non_null:
@@ -61,6 +79,11 @@ def filter_contracts(unsigned, amount_due_non_null):
 
 
 def update(contract_id, **kwargs):
+    """Update a contract.
+    Args:
+        contract_id (int): The id of the contract to update.
+        **kwargs: The fields to update.
+    """
     session = Session()
     contract = session.query(Contract).filter_by(id=contract_id).first()
     if not contract:
@@ -80,6 +103,10 @@ def update(contract_id, **kwargs):
 
 
 def delete(contract_id):
+    """Delete a contract.
+    Args:
+        contract_id (int): The id of the contract to delete.
+    """
     session = Session()
     contract = session.query(Contract).filter_by(id=contract_id).first()
     if not contract:

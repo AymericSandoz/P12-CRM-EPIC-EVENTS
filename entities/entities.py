@@ -1,4 +1,7 @@
 class Commands:
+    """ Class to store action and object type for each command.
+    Used to check if a user has permission to execute a command.
+    """
 
     COMMANDS_PERMISSIONS = {
         'create_user': ('create', 'user'),

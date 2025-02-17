@@ -1,4 +1,5 @@
 import sys
+import click
 
 
 def get_obj_id():
@@ -9,7 +10,7 @@ def get_obj_id():
             obj_id = sys.argv[obj_id_index]
             return obj_id
         except IndexError:
-            print("No value provided for --obj_id")
+            click.echo("No value provided for --obj_id")
     return None
 
 
@@ -21,5 +22,5 @@ def get_contract_id():
             contract_id = sys.argv[contract_id_index]
             return contract_id
         except IndexError:
-            print("No value provided for --contract_id")
+            click.echo("No value provided for --contract_id")
     return None

@@ -2,6 +2,7 @@ import jwt
 import datetime
 from config import SECRET_KEY, JWT_ALGORITHM, JWT_EXPIRATION_TIME
 import os
+import click
 
 
 def create_jwt(user_id):
@@ -18,10 +19,10 @@ def decode_jwt(token):
         payload = jwt.decode(token, SECRET_KEY, algorithms=[JWT_ALGORITHM])
         return payload
     except jwt.ExpiredSignatureError:
-        print("Token has expired. Please login again.")
+        click.echo("Token has expired. Please login again.")
         return None
     except jwt.InvalidTokenError:
-        print("Invalid token.")
+        click.echo("Invalid token.")
         return None
 
 
@@ -31,19 +32,19 @@ def load_jwt():
             token = file.read()
             return token
     except FileNotFoundError:
-        print("No JWT token found.")
+        click.echo("No JWT token found.")
         return None
 
 
 def save_jwt(token):
     with open("jwt.txt", "w") as file:
         file.write(token)
-        print("JWT token saved.")
+        click.echo("JWT token saved.")
 
 
 def delete_jwt():
     try:
         os.remove("jwt.txt")
     except FileNotFoundError:
-        print("No JWT token found.")
+        click.echo("No JWT token found.")
         return None

@@ -4,6 +4,14 @@ from utils.validation_utils import validate_email
 
 
 def create(employee_number, name, email, department_id, password):
+    """Create a new user.
+    Args:
+        employee_number (int): The employee number of the user.
+        name (str): The name of the user.
+        email (str): The email address of the user.
+        department_id (int): The id of the department.
+        password (str): The password of the user
+    """
     session = Session()
     if not validate_email(email):
         raise ValueError("Invalid email address")
@@ -33,6 +41,7 @@ def create(employee_number, name, email, department_id, password):
 
 
 def get_all():
+    """Get all users."""
     session = Session()
     users = session.query(User).all()
     session.close()
@@ -40,6 +49,10 @@ def get_all():
 
 
 def get(user_id):
+    """Get a user by id.
+    Args:
+        user_id (int): The id of the user to get.
+    """
     session = Session()
     user = session.query(User).filter_by(id=user_id).first()
     session.close()
@@ -47,6 +60,11 @@ def get(user_id):
 
 
 def update(user_id, **kwargs):
+    """Update a user.
+    Args:
+        user_id (int): The id of the user to update.
+        **kwargs: The fields to update.
+    """
     session = Session()
     user = session.query(User).filter_by(id=user_id).first()
     if not user:
@@ -71,6 +89,10 @@ def update(user_id, **kwargs):
 
 
 def delete(user_id):
+    """Delete a user.
+    Args:
+        user_id (int): The id of the user to delete.
+    """
     session = Session()
     user = session.query(User).filter_by(id=user_id).first()
     if not user:

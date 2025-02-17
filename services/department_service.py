@@ -3,6 +3,10 @@ from sentry.log import log_action
 
 
 def create(name):
+    """Create a new department.
+    Args:
+        name (str): The name of the department.
+    """
     session = Session()
     new_department = Department(name=name)
     session.add(new_department)
@@ -23,6 +27,7 @@ def create(name):
 
 
 def get_all():
+    """Get all departments."""
     session = Session()
     departments = session.query(Department).all()
     session.close()
@@ -30,6 +35,10 @@ def get_all():
 
 
 def get(department_id):
+    """Get a department by id.
+    Args:
+        department_id (int): The id of the department to get.
+    """
     session = Session()
     department = session.query(Department).filter_by(
         id=department_id).first()
@@ -38,6 +47,11 @@ def get(department_id):
 
 
 def update(department_id, **kwargs):
+    """Update a department.
+    Args:
+        department_id (int): The id of the department to update.
+        **kwargs: The fields to update.
+    """
     session = Session()
     department = session.query(Department).filter_by(
         id=department_id).first()
@@ -58,6 +72,10 @@ def update(department_id, **kwargs):
 
 
 def delete(department_id):
+    """Delete a department.
+    Args:
+        department_id (int): The id of the department to delete.
+    """
     session = Session()
     department = session.query(Department).filter_by(
         id=department_id).first()

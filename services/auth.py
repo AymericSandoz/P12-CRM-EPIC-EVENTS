@@ -5,33 +5,39 @@ from models import Client, Contract, Event
 from entities.entities import Commands
 import sys
 from config import JWT_EXPIRATION_TIME
+import click
 
 
 class AuthenticationError(Exception):
+    """Raised when the user is not authenticated."""
     pass
 
 
 def login(email, password):
+    """Login the user and return a JWT token."""
     session = Session()
     user = session.query(User).filter_by(email=email).first()
 
     if user and user.check_password(password):
         token = create_jwt(user.id)
         save_jwt(token)
-        print(f"Your JWT token is: {token}")
-        print(f"Your token will expire in {JWT_EXPIRATION_TIME} minutes.")
-        print("Carefull, this token will be stored until you logout.")
+        click.echo(f"Your JWT token is: {token}")
+        click.echo(f"Your token will expire in {JWT_EXPIRATION_TIME} minutes.")
+        click.echo("Carefull, this token will be stored until you logout.")
         return token
     else:
-        print("Invalid credentials.")
+        click.echo("Invalid credentials.")
         raise AuthenticationError("Invalid credentials.")
 
 
 def logout():
+    """Logout the user by deleting the JWT token."""
     delete_jwt()
 
 
 def get_current_user():
+    """Get the current user from the JWT token.
+    Returns None if the user is not authenticated."""
     token = load_jwt()
     if token:
         payload = decode_jwt(token)
@@ -45,7 +51,11 @@ def get_current_user():
 
 def check_authorization():
     """
-    Check if the user has the required permissions to perform the action."""
+    Check if the user has the required permissions to perform the action.
+    Returns True if the user has the required permissions, False otherwise.
+    User needs to be authenticated to perform any action.
+    All users can read objects.(GET ALL or GET ONE)
+    """
     token = load_jwt()
     if not token:
         return False
@@ -61,11 +71,11 @@ def check_authorization():
     user = session.query(User).filter_by(id=payload["user_id"]).first()
 
     if not user:
-        print("User not found.")
+        click.echo("User not found.")
         return False
 
     if not user.department:
-        print("User has no department.")
+        click.echo("User has no department.")
         return False
 
     if action == 'read':
@@ -73,12 +83,8 @@ def check_authorization():
 
     # Check user management permissions
     if obj_type == 'user':
-        if user.department.name == 'gestion' and action in ['create', 'update', 'delete']:
-            return True
-        else:
-            print(
-                "Seul le département 'gestion' peut mettre à jour, créer et supprimer des utilisateurs.")
-            return False
+        return check_user_permissions(user, action)
+
     # Check client permissions
     if obj_type == 'client':
         return check_client_permissions(session, user, action, obj_id)
@@ -91,11 +97,26 @@ def check_authorization():
     if obj_type == 'event':
         return check_event_permissions(session, user, action, obj_id)
 
-    print("You don't have the required permissions.")
+    click.echo("You don't have the required permissions.")
     return False
 
 
+def check_user_permissions(user, action):
+    """ Check if the user has the required permissions to perform the action on a user object."""
+    """ User can only be created, updated or deleted by the 'gestion' department."""
+    if user.department.name == 'gestion' and action in ['create', 'update', 'delete']:
+        return True
+    else:
+        click.echo(
+            "Only users from the 'gestion' department can create, update or delete users.")
+        return False
+
+
 def check_client_permissions(session, user, action, client_id):
+    """ Check if the user has the required permissions to perform the action on a client object.
+    Commercial users can only create clients.
+    Commercial users can only update or delete clients they have a contract with.
+    """
     if action == 'create' and user.department.name == 'commercial':
         return True
 
@@ -107,13 +128,18 @@ def check_client_permissions(session, user, action, client_id):
         if client and contract and contract.commercial_contact_id == user.id:
             return True
         else:
-            print("Not authorized to modify this client.")
+            click.echo("Not authorized to modify this client.")
             return False
-    print("Not authorized to perform this action.")
+    click.echo("Not authorized to perform this action.")
     return False
 
 
 def check_contract_permissions(session, user, action, contract_id):
+    """ Check if the user has the required permissions to perform the action on a contract object.
+    Gestion users can create, update or delete contracts any contract.
+    Commercial users can only update or delete contracts where they are the commercial contact.
+    Commercial users only can filter contracts where they are the commercial contact.
+    """
     if action in ['create', 'update', 'delete'] and user.department.name == 'gestion':
         return True
 
@@ -122,25 +148,31 @@ def check_contract_permissions(session, user, action, contract_id):
         if contract and contract.commercial_id == user.id:
             return True
         else:
-            print("Not authorized to modify this contract.")
+            click.echo("Not authorized to modify this contract.")
             return False
 
     if action == 'filter_contracts' and user.department.name == 'commercial':
         return True
-    print("Not authorized to perform this action.")
+    click.echo("Not authorized to perform this action.")
     return False
 
 
 def check_event_permissions(session, user, action, event_id):
+    """ Check if the user has the required permissions to perform the action on an event object.
+    Support users can only update or delete events where they are the support contact.
+    Commercial users can only create events for clients they have a contract with.
+    Gestion users can assign a support contact to an event.
+    Gestion users can filter events."
+    """
     if action in ['update', 'delete'] and user.department.name == 'support':
         event = session.query(Event).filter_by(id=event_id).first()
         if event and event.support_contact == user.name:
             return True
         elif not event:
-            print("Event not found with this id.")
+            click.echo("Event not found with this id.")
             return False
         else:
-            print("Not authorized to modify this event. You are not the support contact.")
+            click.echo("Not authorized to modify this event. You are not the support contact.")
             return False
 
     if action == 'assign_support_contact' and user.department.name == 'gestion':
@@ -154,7 +186,7 @@ def check_event_permissions(session, user, action, event_id):
             return True
         else:
             # Si le commercial n'a pas de contrat avec le client
-            print("Not authorized to create an event for this client. No contract found.")
+            click.echo("Not authorized to create an event for this client. No contract found.")
             return False
 
     if action == 'filter_events' and user.department.name == 'gestion':
@@ -163,5 +195,5 @@ def check_event_permissions(session, user, action, event_id):
     if action == "filter_own_events" and user.department.name == 'support':
         return True
 
-    print("Not authorized to perform this action.")
+    click.echo("Not authorized to perform this action.")
     return False
