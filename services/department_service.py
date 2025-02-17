@@ -11,13 +11,15 @@ def create(name):
     department_info = {
         'name': new_department.name
     }
+
+    new_department_name = new_department.name
     session.close()
 
     # Log the action
     log_action('create', 'department', obj_id=department_id,
                extra_info=department_info)
 
-    return department_id, new_department.name
+    return department_id, new_department_name
 
 
 def get_all():

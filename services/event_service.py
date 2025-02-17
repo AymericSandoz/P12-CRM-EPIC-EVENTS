@@ -32,12 +32,13 @@ def create(event_name=None, event_start_date=None, event_end_date=None, client_i
         'attendees': event.attendees,
         'notes': event.notes
     }
+    event_name = event.event_name
     session.close()
 
     # Log the action
     log_action('create', 'event', obj_id=event_id, extra_info=event_info)
 
-    return event_id, event.event_name
+    return event_id, event_name
 
 
 def get_all():

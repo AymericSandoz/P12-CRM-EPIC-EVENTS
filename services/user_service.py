@@ -23,11 +23,13 @@ def create(employee_number, name, email, department_id, password):
         'email': new_user.email,
         'department_id': new_user.department_id,
     }
+
+    new_user_name = new_user.name
     session.close()
 
     log_action('create', 'user', obj_id=user_id, extra_info=user_info)
 
-    return user_id, new_user.name
+    return user_id, new_user_name
 
 
 def get_all():
@@ -56,6 +58,8 @@ def update(user_id, **kwargs):
         raise ValueError("Invalid email address")
     for key, value in filtered_kwargs.items():
         setattr(user, key, value)
+
+    user_name = user.name
     session.commit()
     session.close()
 
@@ -63,7 +67,7 @@ def update(user_id, **kwargs):
     log_action('update', 'user', obj_id=user_id,
                extra_info=filtered_kwargs)
 
-    return user.name
+    return user_name
 
 
 def delete(user_id):
@@ -77,6 +81,8 @@ def delete(user_id):
         'email': user.email,
         'department_id': user.department_id
     }
+
+    user_name = user.name
     session.delete(user)
     session.commit()
     session.close()
@@ -84,4 +90,4 @@ def delete(user_id):
     # Log the action
     log_action('delete', 'user', obj_id=user_id, extra_info=user_info)
 
-    return user.name
+    return user_name
