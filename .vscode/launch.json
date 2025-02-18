@@ -2,14 +2,6 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: Test récupération Models",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/main.py",
-      "console": "integratedTerminal",
-      "args": ["test"]
-    },
-    {
       "name": "Python: Login with admin(gestion)",
       "type": "python",
       "request": "launch",
@@ -51,6 +43,21 @@
         "login",
         "--email",
         "john_lurl@gmail.com",
+        "--password",
+        "password123"
+      ]
+    },
+    {
+      "name": "Python: Login commercial 2",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "log",
+        "login",
+        "--email",
+        "commercantruud@gmail.com",
         "--password",
         "password123"
       ]
@@ -116,6 +123,27 @@
         "John Lurk",
         "--email",
         "john_lurl@gmail.com",
+        "--password",
+        "password123",
+        "--department_id",
+        "1"
+      ]
+    },
+    {
+      "name": "Python: Create User(Commercial 2)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "user",
+        "create_user",
+        "--employee_number",
+        "5",
+        "--name",
+        "Ruud commercant",
+        "--email",
+        "commercantruud@gmail.com",
         "--password",
         "password123",
         "--department_id",
@@ -202,9 +230,70 @@
         "--company_name",
         "Asscme Inc.",
         "--last_update",
+        "2024-09-01"
+      ]
+    },
+    {
+      "name": "Python: Create Client 2",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "client",
+        "create_client",
+        "--full_name",
+        "ondine novarese",
+        "--email",
+        "ondinenovarese@example.com",
+        "--phone",
+        "+33630710646",
+        "--company_name",
+        "Asscme Inc.",
+        "--last_update",
         "2024-09-01",
-        "--contact_person",
-        "franck martinez"
+      ]
+    },
+    {
+      "name": "Python: Create Client 3",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "client",
+        "create_client",
+        "--full_name",
+        "Ines paysan",
+        "--email",
+        "inespaysan@example.com",
+        "--phone",
+        "+33450710646",
+        "--company_name",
+        "Asscme Inc.",
+        "--last_update",
+        "2024-09-01",
+      ]
+    },
+    {
+      "name": "Python: Create Client 4",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "client",
+        "create_client",
+        "--full_name",
+        "Natacha jemo",
+        "--email",
+        "natachajemo@example.com",
+        "--phone",
+        "+33450630646",
+        "--company_name",
+        "LALALAND Inc.",
+        "--last_update",
+        "2024-09-01",
       ]
     },
     {
@@ -217,11 +306,24 @@
         "client",
         "update_client",
         "--obj_id",
-        "1",
-        "--full_name",
-        "test test Updated Corp",
-        "--email",
-        "testwrongemail&&&"
+        "2",
+        "--company_name",
+        "test company name"
+      ]
+    },
+    {
+      "name": "Python: Update Client 2",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "client",
+        "update_client",
+        "--obj_id",
+        "4",
+        "--company_name",
+        "Nymphea"
       ]
     },
     {
@@ -275,6 +377,25 @@
         "1000",
         "--commercial_contact_id",
         "2"
+      ]
+    },
+    {
+      "name": "Python: Create Contract 2",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "contract",
+        "create_contract",
+        "--client_id",
+        "4",
+        "--total_amount",
+        "600000",
+        "--amount_due",
+        "52200",
+        "--commercial_contact_id",
+        "8"
       ]
     },
     {
@@ -341,7 +462,7 @@
       "console": "integratedTerminal",
       "args": ["event", "filter_own_events"]
 
-    }
+    },
     {
       "name": "Python: Get Event",
       "type": "python",
@@ -397,6 +518,31 @@
       ]
     },
     {
+      "name": "Python: Create Event 2",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "event",
+        "create_event",
+        "--event_name",
+        "Un monde vegan",
+        "--contract_id",
+        "2",
+        "--client_id",
+        "4",
+        "--event_start_date",
+        "2027-09-15",
+        "--event_end_date",
+        "2027-12-26",
+        "--location",
+        "Paris",
+        "--attendees",
+        "20"
+      ]
+    },
+    {
       "name": "Python: Create Incomplete Event 2",
       "type": "python",
       "request": "launch",
@@ -427,9 +573,9 @@
         "event",
         "update_event",
         "--obj_id",
-        "2",
+        "6",
         "--event_name",
-        "Updated event name"
+        "Update Un monde vegan"
       ]
     },
     {
@@ -442,12 +588,12 @@
         "event",
         "assign_support_contact",
         "--obj_id",
-        "2",
+        "6",
         "--support_contact",
         "aymeric sandoz"
       ]
 
-    }
+    },
     {
       "name": "Python: Delete Event",
       "type": "python",

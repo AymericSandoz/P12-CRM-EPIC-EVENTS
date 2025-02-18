@@ -13,7 +13,7 @@ class Client(Base):
     company_name = Column(String(255), nullable=False)
     created_date = Column(Date, nullable=False, default=func.now())
     last_update = Column(Date, nullable=False)
-    contact_person = Column(String(255), nullable=False)
+    contact_person = Column(String(255), nullable=False)  # Commercial contact person
 
     contracts = relationship('Contract', back_populates='client')
     events = relationship('Event', back_populates='client')

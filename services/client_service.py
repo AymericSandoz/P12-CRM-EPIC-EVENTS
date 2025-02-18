@@ -1,9 +1,10 @@
-from models import Client, Session
+from models import Client, Session, User
 from sentry.log import log_action
 from utils.validation_utils import validate_email, validate_phone_number
+from services.auth import get_current_user
 
 
-def create(full_name, email, phone, company_name, last_update, contact_person):
+def create(full_name, email, phone, company_name, last_update):
     """Create a new client.
     Args:
         full_name (str): The full name of the client.
@@ -11,20 +12,20 @@ def create(full_name, email, phone, company_name, last_update, contact_person):
         phone (str): The phone number of the client. Expect format: +33612345678
         company_name (str): The name of the client's company.
         last_update (datetime): The date of the last update.
-        contact_person (str): The name of the client's contact person.
     """
     if not validate_email(email):
         raise ValueError("Invalid email address")
     if not validate_phone_number(phone):
         raise ValueError("Invalid phone number")
     session = Session()
+    user = get_current_user()
     client = Client(
         full_name=full_name,
         email=email,
         phone=phone,
         company_name=company_name,
         last_update=last_update,
-        contact_person=contact_person
+        contact_person=user.name
     )
     session.add(client)
     session.commit()
@@ -80,6 +81,12 @@ def update(client_id, **kwargs):
         raise ValueError("Invalid email address")
     if 'phone' in filtered_kwargs and not validate_phone_number(filtered_kwargs['phone']):
         raise ValueError("Invalid phone number")
+    if 'contact_person' in filtered_kwargs:
+        user = session.query(User).filter_by(
+            name=filtered_kwargs['contact_person']
+        ).filter(User.department.has(name='commercial')).first()
+        if not user:
+            raise ValueError("Contact person must be a user from the commercial department")
     for key, value in filtered_kwargs.items():
         setattr(client, key, value)
 

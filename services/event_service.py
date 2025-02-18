@@ -1,4 +1,4 @@
-from models import Event, Session, User
+from models import Event, Session, User, Client
 from sentry.log import log_action
 from services.auth import get_current_user
 
@@ -19,6 +19,9 @@ def create(event_name=None, event_start_date=None, event_end_date=None, client_i
         notes (str): The notes of the event.
     """
     session = Session()
+    client = session.query(Client).filter_by(id=client_id).first()
+    if not client:
+        raise ValueError("Client not found")
     event = Event(
         event_name=event_name,
         contract_id=contract_id,

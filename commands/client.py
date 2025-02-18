@@ -22,8 +22,6 @@ def client_options(required=True):
                             help='Company name of the client')(func)
         func = click.option('--last_update', required=False,
                             help='Last contact date of the client')(func)
-        func = click.option('--contact_person', required=required,
-                            help='Contact person of the client')(func)
         return func
     return decorator
 
@@ -64,12 +62,11 @@ def get_client(obj_id):
 
 @click.command(name='create_client')
 @client_options(required=True)
-def create_client(full_name, email, phone, company_name, last_update, contact_person):
+def create_client(full_name, email, phone, company_name, last_update):
     """Create a new client."""
     try:
         client_id, client_name = client_service.create(
-            full_name=full_name, email=email, phone=phone, company_name=company_name, last_update=last_update,
-            contact_person=contact_person)
+            full_name=full_name, email=email, phone=phone, company_name=company_name, last_update=last_update)
         click.echo(
             f"Client {client_name} created successfully with ID {client_id}")
     except ValueError as e:
@@ -81,9 +78,12 @@ def create_client(full_name, email, phone, company_name, last_update, contact_pe
 
 @click.command(name='update_client')
 @click.option('--obj_id', type=int, required=True, help='ID of the client')
+@click.option('--contact_person', type=str, required=False, help='Commercial contact person')
 @client_options(required=False)
 def update_client(obj_id, full_name, email, phone, company_name, last_update, contact_person):
-    """Update an existing client."""
+    """Update an existing client.
+    contact_person needs to be the name of the commercial contact person.
+    """
     try:
         client_name = client_service.update(
             client_id=obj_id, full_name=full_name, email=email, phone=phone, company_name=company_name,

@@ -122,10 +122,7 @@ def check_client_permissions(session, user, action, client_id):
 
     if action in ['update', 'delete'] and user.department.name == 'commercial':
         client = session.query(Client).filter_by(id=client_id).first()
-        # vérification que le client appartient bien au commercial
-        # récupération du contrat du client
-        contract = session.query(Contract).filter_by(client_id=client_id).first()
-        if client and contract and contract.commercial_contact_id == user.id:
+        if client and client.contact_person == user.name:
             return True
         else:
             click.echo("Not authorized to modify this client.")
