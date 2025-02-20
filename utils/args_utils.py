@@ -4,6 +4,7 @@ import click
 
 def get_obj_id():
     """ get the object id from the command line arguments """
+    print("get_obj_id", sys.argv)
     if '--obj_id' in sys.argv:
         obj_id_index = sys.argv.index('--obj_id') + 1
         try:
