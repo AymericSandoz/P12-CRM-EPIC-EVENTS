@@ -15,19 +15,19 @@ class AuthenticationError(Exception):
 
 def login(email, password):
     """Login the user and return a JWT token."""
-    session = Session()  # attention à fermer la session
-    user = session.query(User).filter_by(email=email).first()
+    with Session() as session:  # attention à fermer la session
+        user = session.query(User).filter_by(email=email).first()
 
-    if user and user.check_password(password):
-        token = create_jwt(user.id)
-        save_jwt(token)
-        click.echo(f"Your JWT token is: {token}")
-        click.echo(f"Your token will expire in {JWT_EXPIRATION_TIME} minutes.")
-        click.echo("Carefull, this token will be stored until you logout.")
-        return token
-    else:
-        click.echo("Invalid credentials.")
-        raise AuthenticationError("Invalid credentials.")
+        if user and user.check_password(password):
+            token = create_jwt(user.id)
+            save_jwt(token)
+            click.echo(f"Your JWT token is: {token}")
+            click.echo(f"Your token will expire in {JWT_EXPIRATION_TIME} minutes.")
+            click.echo("Carefull, this token will be stored until you logout.")
+            return token
+        else:
+            click.echo("Invalid credentials.")
+            raise AuthenticationError("Invalid credentials.")
 
 
 def logout():
@@ -67,38 +67,38 @@ def check_authorization():
     action, obj_type = Commands.COMMANDS_PERMISSIONS.get(sys.argv[2])
     obj_id = get_obj_id()
 
-    session = Session()  # Attention à fermer la session
-    user = session.query(User).filter_by(id=payload["user_id"]).first()
+    with Session() as session:
+        user = session.query(User).filter_by(id=payload["user_id"]).first()
 
-    if not user:
-        click.echo("User not found.")
+        if not user:
+            click.echo("User not found.")
+            return False
+
+        if not user.department:
+            click.echo("User has no department.")
+            return False
+
+        if action == 'read':
+            return True
+
+        # Check user management permissions
+        if obj_type == 'user':
+            return check_user_permissions(user, action)
+
+        # Check client permissions
+        if obj_type == 'client':
+            return check_client_permissions(session, user, action, obj_id)
+
+        # Check contract permissions
+        if obj_type == 'contract':
+            return check_contract_permissions(session, user, action, obj_id)
+
+        # Check event permissions
+        if obj_type == 'event':
+            return check_event_permissions(session, user, action, obj_id)
+
+        click.echo("You don't have the required permissions.")
         return False
-
-    if not user.department:
-        click.echo("User has no department.")
-        return False
-
-    if action == 'read':
-        return True
-
-    # Check user management permissions
-    if obj_type == 'user':
-        return check_user_permissions(user, action)
-
-    # Check client permissions
-    if obj_type == 'client':
-        return check_client_permissions(session, user, action, obj_id)
-
-    # Check contract permissions
-    if obj_type == 'contract':
-        return check_contract_permissions(session, user, action, obj_id)
-
-    # Check event permissions
-    if obj_type == 'event':
-        return check_event_permissions(session, user, action, obj_id)
-
-    click.echo("You don't have the required permissions.")
-    return False
 
 
 # Refactoriser ses focntion --> éviter les répétitions

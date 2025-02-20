@@ -4,7 +4,6 @@ from config import DATABASE_URL, DATABASE_URL_TEST
 import os
 Base = declarative_base()  # classe de base pour les classes ORM
 
-print("or,rcij,crinrinrgueeeparddddddddddddddddddddd", os.environ.get("ENV"))
 if os.environ.get("ENV") == "TEST":
     engine = create_engine(DATABASE_URL_TEST)
 else:
