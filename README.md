@@ -88,6 +88,12 @@ Epic Events CRM est une application de ligne de commande (CLI) conçue pour gér
 
 7. Un shéma de la base de donnée est disponible dans db_shema.png
 
+8. Suite des élements de configuration.
+   Pour faire fonctionner l'application, vous aurez besoin d'ajouter ces variables à votre fichier de configuration:
+   SECRET_KEY --> Clée secrète utiliser pour générer les JWT
+   JWT_ALGORITHM = "HS256"
+   JWT_EXPIRATION_TIME -- > Temps d'expiration du JWT en minute
+
 ## Authentification avec JWT
 
 L'application utilise un système d'authentification basé sur des tokens JWT. Voici quelques points clés :

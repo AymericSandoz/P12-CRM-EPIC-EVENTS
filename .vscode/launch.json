@@ -172,6 +172,48 @@
       ]
     },
     {
+      "name": "Python: Create User(Gestion) 2",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "user",
+        "create_user",
+        "--employee_number",
+        "12",
+        "--name",
+        "Jeremy toulalan",
+        "--email",
+        "jeremytoulalan@gmail.com",
+        "--password",
+        "password123",
+        "--department_id",
+        "3"
+      ]
+    },
+    {
+      "name": "Python: Create User(Gestion) 3",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "user",
+        "create_user",
+        "--employee_number",
+        "98",
+        "--name",
+        "Jeremy test",
+        "--email",
+        "jeremytest@gmail.com",
+        "--password",
+        "password123",
+        "--department_id",
+        "3"
+      ]
+    },
+    {
       "name": "Python: Update User",
       "type": "python",
       "request": "launch",
@@ -183,7 +225,7 @@
         "--obj_id",
         "2",
         "--employee_number",
-        "32"
+        "51"
       ]
     },
     {
@@ -410,7 +452,7 @@
         "--obj_id",
         "2",
         "--total_amount",
-        "6000"
+        "7000"
       ]
     },
     {
@@ -575,7 +617,7 @@
         "--obj_id",
         "6",
         "--event_name",
-        "Update Un monde vegan"
+        "Un monde vegan new"
       ]
     },
     {

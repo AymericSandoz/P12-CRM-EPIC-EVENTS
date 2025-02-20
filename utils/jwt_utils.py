@@ -32,7 +32,7 @@ def load_jwt():
             token = file.read()
             return token
     except FileNotFoundError:
-        click.echo("No JWT token found.")
+        click.echo("No JWT token found. Please login.")
         return None
 
 

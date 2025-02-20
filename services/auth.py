@@ -15,7 +15,7 @@ class AuthenticationError(Exception):
 
 def login(email, password):
     """Login the user and return a JWT token."""
-    session = Session()
+    session = Session()  # attention à fermer la session
     user = session.query(User).filter_by(email=email).first()
 
     if user and user.check_password(password):
@@ -42,7 +42,7 @@ def get_current_user():
     if token:
         payload = decode_jwt(token)
         if payload:
-            session = Session()
+            session = Session()  # Attention à fermer la session
             user = session.query(User).filter_by(id=payload["user_id"]).first()
             session.close()
             return user
@@ -67,7 +67,7 @@ def check_authorization():
     action, obj_type = Commands.COMMANDS_PERMISSIONS.get(sys.argv[2])
     obj_id = get_obj_id()
 
-    session = Session()
+    session = Session()  # Attention à fermer la session
     user = session.query(User).filter_by(id=payload["user_id"]).first()
 
     if not user:
@@ -101,6 +101,7 @@ def check_authorization():
     return False
 
 
+# Refactoriser ses focntion --> éviter les répétitions
 def check_user_permissions(user, action):
     """ Check if the user has the required permissions to perform the action on a user object."""
     """ User can only be created, updated or deleted by the 'gestion' department."""

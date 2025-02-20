@@ -27,6 +27,8 @@ def create(full_name, email, phone, company_name, last_update):
         last_update=last_update,
         contact_person=user.name
     )
+    print("lalal", client)
+    print("lalal", user.name)
     session.add(client)
     session.commit()
     client_info = {
